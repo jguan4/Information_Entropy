@@ -10,7 +10,14 @@ for m=1:mnum
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     videoData = images;
+    Vin = power_data(1,:);
+    Iin = power_data(2,:);
+    period = 167;
     tic
+    [Vout,Iout,P] =  vc_post_new(Vin,Iin,period);
+    save(strcat(path,'\',flist(m+2).name, 'VIP.mat'),'Vout','Iout','P');
+    fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
+    toc
     space_yval=EntDefect_space(videoData);
     save(strcat(path,'\',flist(m+2).name, '_space_h.mat'),'space_yval');
     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
