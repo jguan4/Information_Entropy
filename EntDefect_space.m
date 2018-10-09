@@ -43,9 +43,9 @@ Y=size(videoData,3);
 fras = 5;
 intvNum = 40;
 intvSkip=1;
-criteria = 30;
+criteria = 10;
 
-totalIntv=(T-intvNum)/intvSkip;
+totalIntv=floor((T-fras-intvNum)/intvSkip);
 yval=zeros(1,totalIntv);
 
 [inds]=findDefect(videoData, fras);
@@ -53,7 +53,7 @@ yval=zeros(1,totalIntv);
 for intv=1:totalIntv
     prevIntv = (intv-1)*intvSkip+1;
     nextIntv = intv*intvSkip+intvNum;
-    [ab,cd]=find(sum(inds(prevIntv:nextIntv, :, :),1)>criteria);
+    [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
     newcom=sum(inds(prevIntv:nextIntv, :, :),1);
     newcom(~ab,~cd)=0;
     %     for s=1:size(ab) % sum up the indices or

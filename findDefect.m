@@ -6,8 +6,8 @@ inds=zeros(T-fras,X,Y);
 
 for i=1:T-fras
     ind=zeros(X,Y);
-    windowstd=std(double(videoData(i:(i+fras),:,:)),0,3);
-    windowmean=mean(double(videoData(i:(i+fras),:,:)),3);
+    windowstd=squeeze(std(double(videoData(i:(i+fras),:,:)),0,1));
+    windowmean=squeeze(mean(double(videoData(i:(i+fras),:,:)),1));
     window_scaled=windowstd./windowmean;
     wsmean=mean2(window_scaled);
     wsstd=std2(window_scaled);
