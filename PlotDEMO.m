@@ -1,8 +1,8 @@
 clear all;
 format long;
 
-path='D:\Documents\GMU\Research\Entropy Project\New Data\V1_0\rawData';
-savepath='D:\Documents\GMU\Research\Entropy Project\New Data\V1_0\Result';
+path='E:\JJ Data\New Data\v_const\RawData';
+savepath='E:\JJ Data\New Data\v_const\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -23,9 +23,11 @@ for m=1:2
     title('Power')
     subplot(3,1,2)
     plot(space_yval);
+    xlim([0 555])
     title('Space h')
     subplot(3,1,3)
     plot(time_h_ave);
+    xlim([0 555])
     title('Time h')
     saveas(gcf,strcat(savepath,'/',trial_stamp,time_stamp,'_power_h.fig'))
 end

@@ -98,6 +98,7 @@ for intv=1:totalIntv
         
         wl = find(abs(diffarray)== mindiff);
         wordlen = wl+1;
-        yval(intv,pp,qq)=newarray(wordlen);
+
+        yval(intv,pp,qq)=newarray(wordlen(0));
     end
 end
