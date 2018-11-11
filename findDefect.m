@@ -1,13 +1,13 @@
-function [inds]=findDefect(videoData, fras)
+function [inds]=findDefect(videoData, fras,n_ahead)
 T=size(videoData,1);
 X=size(videoData,2);
 Y=size(videoData,3);
 inds=zeros(T-fras,X,Y);
 
-for i=1:T-fras
+for i=1:T-fras*n_ahead
     ind=zeros(X,Y);
-    windowstd=squeeze(std(double(videoData(i:(i+fras),:,:)),0,1));
-    windowmean=squeeze(mean(double(videoData(i:(i+fras),:,:)),1));
+    windowstd=squeeze(std(double(videoData(i:n_ahead:(i+n_ahead*fras),:,:)),0,1));
+    windowmean=squeeze(mean(double(videoData(i:n_ahead:(i+n_ahead*fras),:,:)),1));
     window_scaled=windowstd./windowmean;
     wsmean=mean2(window_scaled);
     wsstd=std2(window_scaled);

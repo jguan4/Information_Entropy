@@ -6,7 +6,7 @@ savepath='E:\JJ Data\New Data\v_const\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
-for m=3:mnum
+for m=1:mnum
     load(strcat(path,'\',flist(m+2).name))
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
@@ -15,7 +15,8 @@ for m=3:mnum
     Iin = power_data(2,:);
     period = 167;
     fras = 5;
-    [inds]=findDefect(videoData, fras);
+    n_ahead = 2;
+    [inds]=findDefect(videoData, fras, n_ahead);
     tic
     [Vout,Iout,P] =  vc_post_new(Vin,Iin,period);
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'Vout','Iout','P');
