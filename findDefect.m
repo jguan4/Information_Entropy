@@ -2,7 +2,7 @@ function [inds]=findDefect(videoData, fras,n_ahead)
 T=size(videoData,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-inds=zeros(T-fras,X,Y);
+inds=zeros(T-fras*n_ahead,X,Y);
 
 for i=1:T-fras*n_ahead
     ind=zeros(X,Y);
