@@ -6,10 +6,11 @@ for i = 1:T-fras*n_ahead
     com_hh = zeros(fras, 1);
     for j=0:fras-1
         A=squeeze(double(videoData(i+n_ahead*j,:,:)));
-        imwrite(A,'newImage.jpg','jpg');
-        info = imfinfo('newImage.jpg');
-        com_hh(j+1) = info.FileSize;
-        delete('newImage.jpg')
+        B=imresize(A,[256,512]);
+        wcompress('c',B,'newImage.wtc','ezw');
+        f=dir('newImage.wtc');
+        com_hh(j+1) =f.bytes;
+        delete('newImage.wtc')
     end
     com_h(i) = mean(com_hh);
 end
