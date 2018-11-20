@@ -4,10 +4,10 @@ X=size(videoData,2);
 Y=size(videoData,3);
 inds=zeros(T-fras*n_ahead,X,Y);
 
-for i=1:T-fras*n_ahead
+for i=1:T-(fras-1)*n_ahead
     ind=zeros(X,Y);
-    windowstd=squeeze(std(double(videoData(i:n_ahead:(i+n_ahead*fras),:,:)),0,1));
-    windowmean=squeeze(mean(double(videoData(i:n_ahead:(i+n_ahead*fras),:,:)),1));
+    windowstd=squeeze(std(double(videoData(i:n_ahead:(i+n_ahead*(fras-1)),:,:)),0,1));
+    windowmean=squeeze(mean(double(videoData(i:n_ahead:(i+n_ahead*(fras-1)),:,:)),1));
     window_scaled=windowstd./windowmean;
     wsmean=mean2(window_scaled);
     wsstd=std2(window_scaled);
