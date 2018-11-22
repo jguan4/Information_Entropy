@@ -38,13 +38,14 @@ word_size_min = 1; % min word length
 word_size_max = 9; % max word length
 
 T=size(videoData,1);
+Tt = size(inds,1);
 X=size(videoData,2);
 Y=size(videoData,3);
 intvNum = 40;
 intvSkip=1;
 criteria = 10;
 
-totalIntv=floor((T-fras-intvNum)/intvSkip);
+totalIntv=floor((Tt-intvNum)/intvSkip);
 yval=zeros(1,totalIntv);
 
 for intv=1:totalIntv
