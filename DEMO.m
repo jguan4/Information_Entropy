@@ -2,7 +2,7 @@ clear all;
 format long;
 
 path='E:\JJ Data\New Data\v_const\RawData';
-savepath='E:\JJ Data\New Data\v_const\Result';
+savepath='E:\JJ Data\New Data\v_const\Result_new';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -22,7 +22,7 @@ for m=1:mnum
     [space_inds]=findDefect(videoData, fras, space_n_ahead);
     tic
     [Vout,Iout,P] =  vc_post_new(Vin,Iin,period);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP_',num2str(n_ahead),'.mat'),'Vout','Iout','P');
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'Vout','Iout','P');
     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
     toc
     space_yval=EntDefect_space(videoData,fras,space_inds);
