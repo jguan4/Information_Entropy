@@ -6,7 +6,7 @@ savepath='E:\JJ Data\New Data\v_const\Result_new';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
-for m=1:mnum
+for m=2:mnum
     load(strcat(path,'\',flist(m+2).name))
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
@@ -34,7 +34,7 @@ for m=1:mnum
     fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
     toc
     com_h = compression_h(videoData,fras,space_n_ahead);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(n_ahead),'.mat'),'com_h');
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'.mat'),'com_h');
     fprintf(strcat('for calculating compression h of  ',flist(m+2).name,'\n'))
     toc
 end
