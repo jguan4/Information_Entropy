@@ -35,8 +35,8 @@ for m=2:mnum
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'.mat'),'time_yval');
     fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
     toc
-    com_h = compression_h(videoData,fras,space_n_ahead, space_inds, pic);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(n_ahead),'_active.mat'),'com_h');
+    com_h = compression_h(videoData,fras,space_n_ahead);
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'.mat'),'com_h');
     fprintf(strcat('for calculating compression h of  ',flist(m+2).name,'\n'))
     toc
 end
