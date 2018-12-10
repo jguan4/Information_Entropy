@@ -24,15 +24,15 @@
 % the program relies on the following additional MATLAB programs:
 % partition.m, counts.m, entropy_miller.m, entropy_grassberger.m, get_entropy_rate.m
 
-function yval=EntDefect_space(videoData,fras,inds)
+function yval=EntDefect_space(videoData,fras,inds,full)
 
 clearvars -except newcom numd inds videoData fras
 format long
 
 width = 10; % size of partitions
 ref = 3;    % partition wall/divider reference: 1 = min, 2 = max, 3 = mean,
-            % 4 = special reference: makes an alphabet of size 'width' with
-            % the mean as a reference
+% 4 = special reference: makes an alphabet of size 'width' with
+% the mean as a reference
 
 word_size_min = 1; % min word length
 word_size_max = 9; % max word length
@@ -51,9 +51,14 @@ yval=zeros(1,totalIntv);
 for intv=1:totalIntv
     prevIntv = (intv-1)*intvSkip+1;
     nextIntv = intv*intvSkip+intvNum;
-    [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
-    newcom=sum(inds(prevIntv:nextIntv, :, :),1);
-    newcom(~ab,~cd)=0;
+    switch full
+        case 1
+            newcom=inds;
+        case 0
+            newcom=sum(inds(prevIntv:nextIntv, :, :),1);
+            [ab,cd]=find(squeeze(newcom)>criteria);
+            newcom(~ab,~cd)=0;
+    end
     %     for s=1:size(ab) % sum up the indices or
     %         pp=ab(s);
     %         qq=cd(s);
