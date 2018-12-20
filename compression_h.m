@@ -1,5 +1,6 @@
 function com_h = compression_h(videoData, fras, n_ahead, space_inds, pic)
 T=size(videoData,1);
+Tt = size(space_inds,1);
 intvNum = 40;
 intvSkip=1;
 criteria = 10;
@@ -25,7 +26,7 @@ switch pic
             prevIntv = (intv-1)*intvSkip+1;
             nextIntv = intv*intvSkip+intvNum;
             [ab,cd]=find(squeeze(sum(space_inds(prevIntv:nextIntv, :, :),1))>criteria);
-            newcom=sum(space_inds(prevIntv:nextIntv, :, :),1);
+            newcom=squeeze(sum(space_inds(prevIntv:nextIntv, :, :),1));
             newcom(~ab,~cd)=0;
             wcompress('c',newcom,'newImage.wtc','ezw');
             f=dir('newImage.wtc');

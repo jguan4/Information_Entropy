@@ -26,7 +26,7 @@
 
 function yval=EntDefect_space(videoData,fras,inds,full)
 
-clearvars -except newcom numd inds videoData fras
+clearvars -except newcom numd inds videoData fras full
 format long
 
 width = 10; % size of partitions
@@ -53,7 +53,7 @@ for intv=1:totalIntv
     nextIntv = intv*intvSkip+intvNum;
     switch full
         case 1
-            newcom=inds;
+            newcom=sum(inds(prevIntv:nextIntv, :, :),1);
         case 0
             newcom=sum(inds(prevIntv:nextIntv, :, :),1);
             [ab,cd]=find(squeeze(newcom)>criteria);
