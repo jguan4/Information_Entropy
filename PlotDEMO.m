@@ -5,25 +5,32 @@ path='E:\JJ Data\New Data\v_const\RawData';
 savepath='E:\JJ Data\New Data\v_const\Result_new';
 flist=dir(path);
 mnum=size(flist,1)-2;
-time_n_ahead = 1;
+time_n_ahead = 2;
 space_n_ahead = 2;
+full = 0;
 
 a = 1;
-n_average = 3000;
+n_average = 8000;
 b = ones([1,n_average])/n_average;
 
 for m=2:mnum
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
-    load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'.mat'));
-    load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'.mat'));
-    load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'.mat'));
+    if full ==1
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'_full.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'.mat'));
+    else
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'_active.mat'));
+    end
     sizeT = length(space_yval);
     sizeP = length(P);
     sizeInd_time = length(time_yval);
     sizeInd_space = length(space_yval);
-%     P_resize = resample(P,sizeT,sizeP);
+    %     P_resize = resample(P,sizeT,sizeP);
     P_filter = filter(b,a,P);
     time_h_ave = squeeze(mean(mean(time_yval,2),3));
     figure
@@ -34,14 +41,14 @@ for m=2:mnum
     subplot(4,1,2)
     plot(space_yval);
     xlim([0 sizeInd_space])
-    title('Space h')
+    title(strcat('Space h', num2str(space_n_ahead)))
     subplot(4,1,3)
     plot(time_h_ave);
     xlim([0 sizeInd_time])
-    title('Time h')
+    title(strcat('Time h', num2str(time_n_ahead)))
     subplot(4,1,4)
     plot(com_h);
     xlim([0 sizeInd_space])
-    title('Compression h')
+    title(strcat('Compression h', num2str(space_n_ahead)))
     saveas(gcf,strcat(savepath,'/',trial_stamp,time_stamp,'_power_h.fig'))
 end
