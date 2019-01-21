@@ -53,19 +53,22 @@ for intv=1:totalIntv
     nextIntv = intv*intvSkip+intvNum;
     switch full
         case 1
-            newcom=sum(inds(prevIntv:nextIntv, :, :),1);
+            newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
+            coms=newcom;
         case 0
-            newcom=sum(inds(prevIntv:nextIntv, :, :),1);
-            [ab,cd]=find(squeeze(newcom)>criteria);
-            newcom(~ab,~cd)=0;
+            newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
+            [ab,cd]=find(newcom>criteria);
+            lin_ind=sub2ind(size(newcom),ab,cd);
+            coms=zeros(size(newcom));
+            coms(lin_ind)=newcom(lin_ind);
     end
     %     for s=1:size(ab) % sum up the indices or
     %         pp=ab(s);
     %         qq=cd(s);
     %         qjtrial2=squeeze(double(newcom(pp,qq,(intv-1)*intvSkip+1:intv*intvSkip+intvNum)));
     % newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
-    newcom=reshape(newcom,[1 X*Y]);
-    rp6=newcom;
+    coms=reshape(coms,[1 X*Y]);
+    rp6=coms;
     pred=double(rp6);
     px=pred;
     lent=size(pred);
