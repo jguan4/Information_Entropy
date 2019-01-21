@@ -24,9 +24,9 @@
 % the program relies on the following additional MATLAB programs:
 % partition.m, counts.m, entropy_miller.m, entropy_grassberger.m, get_entropy_rate.m
 
-function yval=EntDefect_time(videoData,fras,inds)
+function yval=EntDefect_time(videoData,fras,inds,full)
 
-clearvars -except newcom numd inds videoData fras
+clearvars -except newcom numd inds videoData fras full
 format long
 
 width = 10; % size of partitions
@@ -51,11 +51,16 @@ yval=zeros([totalIntv,X,Y]);
 for intv=1:totalIntv
     prevIntv = (intv-1)*intvSkip+1;
     nextIntv = intv*intvSkip+intvNum;
-    [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
-    for s=1:size(ab)
-        pp=ab(s);
-        qq=cd(s);
-        qjtrial2=squeeze(double(videoData(prevIntv:nextIntv,pp,qq)));
+    switch full
+        case 1 
+            [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>0);
+            lin_ind=sub2ind([X, Y],ab,cd);
+        case 0
+            [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
+            lin_ind=sub2ind([X, Y],ab,cd);
+    end
+    for s=1:length(lin_ind)
+        qjtrial2=squeeze(double(videoData(prevIntv:nextIntv,lin_ind(s))));
         rp6=qjtrial2;
         pred=double(rp6);
         px=pred;
