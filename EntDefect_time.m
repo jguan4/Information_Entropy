@@ -60,7 +60,8 @@ for intv=1:totalIntv
             lin_ind=sub2ind([X, Y],ab,cd);
     end
     for s=1:length(lin_ind)
-        qjtrial2=squeeze(double(videoData(prevIntv:nextIntv,lin_ind(s))));
+        ind_s=lin_ind(s);
+        qjtrial2=squeeze(double(videoData(prevIntv:nextIntv,ind_s)));
         rp6=qjtrial2;
         pred=double(rp6);
         px=pred;
@@ -105,6 +106,6 @@ for intv=1:totalIntv
         wl = find(abs(diffarray)== mindiff);
         wordlen = wl+1;
 
-        yval(intv,pp,qq)=newarray(wordlen(1));
+        yval(intv,ind_s)=newarray(wordlen(1));
     end
 end
