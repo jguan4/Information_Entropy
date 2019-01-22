@@ -26,16 +26,16 @@ for m=2:mnum
 %     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'Vout','Iout','P');
 %     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
 %     toc
-    space_yval=EntDefect_space(videoData,fras,space_inds, full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'_',num2str(full),'.mat'),'space_yval');
-    fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
-    toc
-%     time_yval = EntDefect_time(videoData,fras,time_inds);
-%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'.mat'),'time_yval');
-%     fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
+%     space_yval=EntDefect_space(videoData,fras,space_inds, full);
+%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'_',num2str(full),'.mat'),'space_yval');
+%     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
 %     toc
-    com_h = compression_h(videoData,fras,space_n_ahead, space_inds, full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'_',num2str(full),'.mat'),'com_h');
-    fprintf(strcat('for calculating compression h of  ',flist(m+2).name,'\n'))
+    time_yval = EntDefect_time(videoData,fras,time_inds,full);
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'),'time_yval');
+    fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
     toc
+%     com_h = compression_h(videoData,fras,space_n_ahead, space_inds, full);
+%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'_',num2str(full),'.mat'),'com_h');
+%     fprintf(strcat('for calculating compression h of  ',flist(m+2).name,'\n'))
+%     toc
 end
