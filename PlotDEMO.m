@@ -2,7 +2,7 @@ clear all;
 format long;
 
 path='E:\JJ Data\New Data\v_const\RawData';
-savepath='E:\JJ Data\New Data\v_const\Result_new';
+savepath='E:\JJ Data\New Data\v_const\Result_new_1';
 flist=dir(path);
 mnum=size(flist,1)-2;
 time_n_ahead = 2;
@@ -18,9 +18,9 @@ for m=2
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
     if full ==1
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'_full.mat'));
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'.mat'));
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     else
         load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'.mat'));
         load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'.mat'));
