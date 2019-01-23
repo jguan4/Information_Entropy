@@ -52,60 +52,61 @@ for intv=1:totalIntv
     prevIntv = (intv-1)*intvSkip+1;
     nextIntv = intv*intvSkip+intvNum;
     switch full
-        case 1 
+        case 1
             [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>0);
             lin_ind=sub2ind([X, Y],ab,cd);
         case 0
             [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
             lin_ind=sub2ind([X, Y],ab,cd);
     end
-    for s=1:length(lin_ind)
-        ind_s=lin_ind(s);
-        qjtrial2=squeeze(double(videoData(prevIntv:nextIntv,ind_s)));
-        rp6=qjtrial2;
-        pred=double(rp6);
-        px=pred;
-        lent=size(pred);
-        prt=floor((lent/1.01));
-        bb=lent/prt;
-        lst=floor(bb);
-        h = zeros(lst,1);
-        E = zeros(lst,1);
-        L = zeros(lst,1);
-        
-        for q=1:lst
-            pxn=(px-mean(px))./(std(px));
-            data = partition(pxn,width,ref);
-            
-            N = length(data);
-            len=(word_size_max-word_size_min)+1;
-            
-            H=zeros(len+1,lst);
-            for ind = 1:len
-                L = word_size_min+ind-1;
-                n = counts(data,L);
-                % p = n/sum(n);
-                % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
-                % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
-                H(ind+1,q) = entropy_grassberger(n,N); % Grassberger estimate
-                
-            end
-            
-            %% calculate entropy rate from block entropies
-            
-            
-            %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
-            %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
-            [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
+    %     for s=1:length(lin_ind)
+    %         ind_s=lin_ind(s);
+    qjtrial2=squeeze(double(videoData(prevIntv:nextIntv,lin_ind)));
+    rp6=qjtrial2;
+    pred=double(rp6);
+    px=pred;
+    lent=size(pred,1);
+    prt=floor((lent/1.01));
+    bb=lent/prt;
+    lst=floor(bb);
+    %         h = zeros(lst,1);
+    %         E = zeros(lst,1);
+    %         L = zeros(lst,1)
+    
+    pxn=(px-mean(px))./(std(px));
+    data = partition(pxn,width,ref);
+    
+    N = size(data,1);
+    num_data = size(data,2);
+    len=(word_size_max-word_size_min)+1;
+    
+    H=zeros(len+1,num_data);
+    for q=1:num_data
+        for ind = 1:len
+            L = word_size_min+ind-1;
+            n = counts(data(:,q),L);
+            % p = n/sum(n);
+            % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
+            % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
+            H(ind+1,q) = entropy_grassberger(n,N); % Grassberger estimate
             
         end
-        newarray=diff(H(:,1)');
-        diffarray = diff(newarray(1,1:7));
-        mindiff = min(abs(diffarray));
         
-        wl = find(abs(diffarray)== mindiff);
-        wordlen = wl+1;
-
-        yval(intv,ind_s)=newarray(wordlen(1));
+        %% calculate entropy rate from block entropies
+        
+        
+        %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
+        %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
+        %             [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
+        
     end
+    newarray=diff(H);
+    diffarray = diff(newarray(1:7,:));
+    mindiff = min(abs(diffarray));
+    
+    [row,col] = find(abs(diffarray)== mindiff);
+    wordlen = row+1;
+    
+    yval(intv,lin_ind)=newarray(sub2ind(size(newarray),wordlen,col));
+    %     end
 end

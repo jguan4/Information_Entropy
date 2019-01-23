@@ -3,10 +3,12 @@ format long;
 
 path='E:\JJ Data\New Data\v_const\RawData';
 savepath='E:\JJ Data\New Data\v_const\Result_new_1';
+% path='D:\Documents\GMU\Research\Entropy Project\New Data\v_const\RawData';
+% savepath='D:\Documents\GMU\Research\Entropy Project\New Data\v_const\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
-for m=2:16
+for m=5:16
     load(strcat(path,'\',flist(m+2).name))
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));

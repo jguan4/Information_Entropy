@@ -16,7 +16,7 @@ n = ceil((maxdata-mindata)/width); % round up
 
 %% assign symbols to data according to partition (0 to n-1)
 
-data = zeros(length(u),1);
+data = zeros(size(u));
 
 if ref == 1
 
