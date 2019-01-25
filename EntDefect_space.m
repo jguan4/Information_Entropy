@@ -41,7 +41,7 @@ T=size(videoData,1);
 Tt = size(inds,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-intvNum = 40;
+intvNum = 1;
 intvSkip=1;
 criteria = 10;
 
@@ -53,14 +53,16 @@ for intv=1:totalIntv
     nextIntv = intv*intvSkip+intvNum;
     switch full
         case 1
-            newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
-            coms=newcom;
+            %             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
+            %             coms=newcom;
+            coms = squeeze(videoData(prevIntv:nextIntv, :, :));
         case 0
             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
+            videocom = squeeze(videoData(prevIntv:nextIntv, :, :));
             [ab,cd]=find(newcom>criteria);
             lin_ind=sub2ind(size(newcom),ab,cd);
             coms=zeros(size(newcom));
-            coms(lin_ind)=newcom(lin_ind);
+            coms(lin_ind)=videocom(lin_ind);
     end
     %     for s=1:size(ab) % sum up the indices or
     %         pp=ab(s);
