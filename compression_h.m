@@ -11,8 +11,9 @@ switch full
     case 1
         for intv=1:totalIntv
             prevIntv = (intv-1)*intvSkip+1;
-            nextIntv = intv*intvSkip+intvNum;
-            newcom=squeeze(sum(space_inds(prevIntv:nextIntv, :, :),1));
+            nextIntv = intv*intvSkip+intvNum-1;
+            %             newcom=squeeze(sum(space_inds(prevIntv:nextIntv, :, :),1));
+            newcom = squeeze(videoData(prevIntv:nextIntv, :, :));
             wcompress('c',newcom,'newImage.wtc','ezw');
             f=dir('newImage.wtc');
             com_h(intv) =f.bytes;
