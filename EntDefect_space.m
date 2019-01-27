@@ -50,7 +50,7 @@ yval=zeros(1,totalIntv);
 
 for intv=1:totalIntv
     prevIntv = (intv-1)*intvSkip+1;
-    nextIntv = intv*intvSkip+intvNum;
+    nextIntv = intv*intvSkip+intvNum-1;
     switch full
         case 1
             %             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));

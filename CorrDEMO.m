@@ -35,8 +35,8 @@ for m=2:10
     %     P_resize = resample(P,sizeT,sizeP);
     P_filter = filter(b,a,P);
     
-    [t_s_c, t_s_lags] = xcov(space_yval,time_h_ave);
+    [t_s_c, t_s_lags] = xcov(space_yval,time_h_ave,'coeff');
     figure;
-    plot(t_s_lags,t_s_c(:,1));
+    plot(t_s_lags,t_s_c);
     title('Space vs. Time');
 end
