@@ -17,6 +17,11 @@ a = 1;
 n_average = 8000;
 b = ones([1,n_average])/n_average;
 
+arr_ind = 1;
+t_s_corr_lag = [];
+p_s_corr_lag = [];
+p_t_corr_lag = [];
+
 for m=2:10
     % Loading files
     trial_stamp =  flist(m+2).name(1:8);
@@ -27,16 +32,37 @@ for m=2:10
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     
     % Get data parameters and adjust entropy
-    sizeT = length(space_yval);
-    sizeP = length(P);
     sizeInd_time = length(time_yval);
     sizeInd_space = length(space_yval);
     time_h_ave = squeeze(mean(mean(time_yval,2),3));
-    %     P_resize = resample(P,sizeT,sizeP);
     P_filter = filter(b,a,P);
+    P_filter_cut = P_filter(n_average+1:end);
+    sizeP = length(P_filter_cut);
+    P_resize = resample(P_filter_cut,sizeInd_time,sizeP);
+    space_yval_resize = resample(space_yval, sizeInd_time,sizeInd_space);
     
-    [t_s_c, t_s_lags] = xcov(space_yval,time_h_ave,'coeff');
+    [t_s_c, t_s_lags] = xcov(time_h_ave,space_yval_resize,'coeff');
+    [M,I]=max(t_s_c);
+    t_s_corr_lag(arr_ind,:) = [M t_s_lags(I)];
+    
+    [p_s_c, p_s_lags] = xcov(P_resize,space_yval_resize,'coeff');
+    [M,I]=max(p_s_c);
+    p_s_corr_lag(arr_ind,:) = [M p_s_lags(I)];
+    
+    [p_t_c, p_t_lags] = xcov(P_resize,time_h_ave,'coeff');
+    [M,I]=max(p_t_c);
+    p_t_corr_lag(arr_ind,:) = [M p_t_lags(I)];
+
+    arr_ind = arr_ind + 1;
+    
     figure;
+    subplot(3,1,1)
     plot(t_s_lags,t_s_c);
-    title('Space vs. Time');
+    title('Time vs. Space');
+    subplot(3,1,2)
+    plot(p_s_lags,p_s_c);
+    title('Power vs. Space');
+    subplot(3,1,3)
+    plot(p_t_lags,p_t_c);
+    title('Power vs. Time');
 end
