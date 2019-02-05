@@ -44,7 +44,7 @@ for m=2:10
     space_yval_resize_n = (space_yval_resize-mean(space_yval_resize))./std(space_yval_resize);
     time_h_ave_n = (time_h_ave-mean(time_h_ave))./std(time_h_ave);
     P_resize_n =( P_resize-mean(P_resize))./std(P_resize);
-    caxis([min(P_resize_n) max(P_resize_n)]);
+    
 %     [t_s_c, t_s_lags] = xcov(time_h_ave,space_yval_resize,'coeff');
 %     [M,I]=max(abs(t_s_c));
 %     t_s_corr_lag(arr_ind,:) = [t_s_c(I) t_s_lags(I)];
@@ -82,7 +82,9 @@ for m=2:10
 
 
     figure;
-    plot(time_h_ave_n,space_yval_resize_n,'Color',P_resize_n);
+    caxis([min(P_resize_n) max(P_resize_n)]);
+    s = scatter(time_h_ave_n,space_yval_resize_n);
+    s.CData = P_resize_n;
     title('Time vs. Space')
     drawnow;
 end
