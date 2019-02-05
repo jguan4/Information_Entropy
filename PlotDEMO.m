@@ -50,5 +50,6 @@ for m=2:10
     plot(com_h);
     xlim([0 sizeInd_space])
     title(strcat('Compression h_', num2str(space_n_ahead),' full=', num2str(full)))
-    saveas(gcf,strcat(savepath,'/',trial_stamp,time_stamp,'_power_h.fig'))
+    drawnow;
+%     saveas(gcf,strcat(savepath,'/',trial_stamp,time_stamp,'_power_h.fig'))
 end

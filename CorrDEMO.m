@@ -41,28 +41,48 @@ for m=2:10
     P_resize = resample(P_filter_cut,sizeInd_time,sizeP);
     space_yval_resize = resample(space_yval, sizeInd_time,sizeInd_space);
     
-    [t_s_c, t_s_lags] = xcov(time_h_ave,space_yval_resize,'coeff');
-    [M,I]=max(t_s_c);
-    t_s_corr_lag(arr_ind,:) = [M t_s_lags(I)];
-    
-    [p_s_c, p_s_lags] = xcov(P_resize,space_yval_resize,'coeff');
-    [M,I]=max(p_s_c);
-    p_s_corr_lag(arr_ind,:) = [M p_s_lags(I)];
-    
-    [p_t_c, p_t_lags] = xcov(P_resize,time_h_ave,'coeff');
-    [M,I]=max(p_t_c);
-    p_t_corr_lag(arr_ind,:) = [M p_t_lags(I)];
+    space_yval_resize_n = (space_yval_resize-mean(space_yval_resize))./std(space_yval_resize);
+    time_h_ave_n = (time_h_ave-mean(time_h_ave))./std(time_h_ave);
+    P_resize_n =( P_resize-mean(P_resize))./std(P_resize);
+    caxis([min(P_resize_n) max(P_resize_n)]);
+%     [t_s_c, t_s_lags] = xcov(time_h_ave,space_yval_resize,'coeff');
+%     [M,I]=max(abs(t_s_c));
+%     t_s_corr_lag(arr_ind,:) = [t_s_c(I) t_s_lags(I)];
+%     
+%     [p_s_c, p_s_lags] = xcov(P_resize,space_yval_resize,'coeff');
+%     [M,I]=max(abs(p_s_c));
+%     p_s_corr_lag(arr_ind,:) = [p_s_c(I) p_s_lags(I)];
+%     
+%     [p_t_c, p_t_lags] = xcov(P_resize,time_h_ave,'coeff');
+%     [M,I]=max(abs(p_t_c));
+%     p_t_corr_lag(arr_ind,:) = [ p_t_c(I) p_t_lags(I)];
 
     arr_ind = arr_ind + 1;
     
+%     figure;
+%     subplot(3,1,1)
+%     plot3(1:sizeInd_time,time_h_ave_n,space_yval_resize_n);
+%     title('Time vs. Space');
+%     subplot(3,1,2)
+%     plot3(1:sizeInd_time,P_resize_n,space_yval_resize_n)
+%     title('Power vs. Space');
+%     subplot(3,1,3)
+%     plot3(1:sizeInd_time,P_resize_n,time_h_ave_n);
+%     title('Power vs. Time');
+%     drawnow;
+
+%     plot(t_s_lags,t_s_c);
+%     title('Time vs. Space');
+%     subplot(3,1,2)
+%     plot(p_s_lags,p_s_c);
+%     title('Power vs. Space');
+%     subplot(3,1,3)
+%     plot(p_t_lags,p_t_c);
+%     title('Power vs. Time');
+
+
     figure;
-    subplot(3,1,1)
-    plot(t_s_lags,t_s_c);
-    title('Time vs. Space');
-    subplot(3,1,2)
-    plot(p_s_lags,p_s_c);
-    title('Power vs. Space');
-    subplot(3,1,3)
-    plot(p_t_lags,p_t_c);
-    title('Power vs. Time');
+    plot(time_h_ave_n,space_yval_resize_n,'Color',P_resize_n);
+    title('Time vs. Space')
+    drawnow;
 end

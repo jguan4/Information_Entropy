@@ -1,7 +1,7 @@
 function com_h = compression_h(videoData, fras, n_ahead, space_inds, full)
 T=size(videoData,1);
 Tt = size(space_inds,1);
-intvNum = 40;
+intvNum = 1;
 intvSkip=1;
 criteria = 10;
 
