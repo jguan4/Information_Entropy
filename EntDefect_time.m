@@ -101,12 +101,15 @@ for intv=1:totalIntv
         
     end
     newarray=diff(H);
-    diffarray = diff(newarray(1:7,:));
-    mindiff = min(abs(diffarray));
+%     diffarray = diff(newarray(2:7,:));
+%     [mindiff,mindiff_I] = min(abs(diffarray));
     
-    [row,col] = find(abs(diffarray)== mindiff);
-    wordlen = row+1;
-    
-    yval(intv,lin_ind)=newarray(sub2ind(size(newarray),wordlen,col));
+%     [row,col] = find(abs(diffarray)== mindiff);
+%     wordlen = row+1;
+    wordlen = 4*ones([1,length(lin_ind)])+1;
+    col = 1:length(lin_ind);
+
+    yval(intv,lin_ind)=squeeze(newarray(sub2ind(size(newarray),wordlen,col)));
+
     %     end
 end

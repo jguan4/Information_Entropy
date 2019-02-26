@@ -81,10 +81,12 @@ for m=2:10
 %     title('Power vs. Time');
 
 
-    figure;
+    figure(10);
+    hold on;
     caxis([min(P_resize_n) max(P_resize_n)]);
-    s = scatter(time_h_ave_n,space_yval_resize_n);
+    s = scatter(time_h_ave,space_yval_resize);
     s.CData = P_resize_n;
+    colorbar;
     title('Time vs. Space')
     drawnow;
 end
