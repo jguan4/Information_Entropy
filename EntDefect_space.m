@@ -41,79 +41,84 @@ T=size(videoData,1);
 Tt = size(inds,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-intvNum = 1;
-intvSkip=1;
 criteria = 10;
+int_len = 30;
+intvSkip = 5;
 
-totalIntv=floor((Tt-intvNum)/intvSkip);
+totalIntv=floor((X*Y-int_len)/intvSkip);
 yval=zeros(1,totalIntv);
 
-for intv=1:totalIntv
-    prevIntv = (intv-1)*intvSkip+1;
-    nextIntv = intv*intvSkip+intvNum-1;
+for frame = 1:T
     switch full
         case 1
             %             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
             %             coms=newcom;
-            coms = squeeze(videoData(prevIntv:nextIntv, :, :));
+            coms = squeeze(videoData(frame, :, :));
         case 0
-            newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
-            videocom = squeeze(videoData(prevIntv:nextIntv, :, :));
+            newcom=squeeze(sum(inds(frame, :, :),1));
+            videocom = squeeze(videoData(frame, :, :));
             [ab,cd]=find(newcom>criteria);
             lin_ind=sub2ind(size(newcom),ab,cd);
             coms=zeros(size(newcom));
             coms(lin_ind)=videocom(lin_ind);
     end
-    %     for s=1:size(ab) % sum up the indices or
-    %         pp=ab(s);
-    %         qq=cd(s);
-    %         qjtrial2=squeeze(double(newcom(pp,qq,(intv-1)*intvSkip+1:intv*intvSkip+intvNum)));
-    % newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
     coms=reshape(coms,[1 X*Y]);
-    rp6=coms;
-    pred=double(rp6);
-    px=pred;
-    lent=size(pred);
-    prt=floor((lent/1.01));
-    bb=lent/prt;
-    lst=floor(bb);
-    h = zeros(lst,1);
-    E = zeros(lst,1);
-    L = zeros(lst,1);
-    
-    for q=1:lst
-        pxn=(px-mean(px))./(std(px));
-        size(pxn);
-        data = partition(pxn,width,ref);
+    for intv=1:totalIntv
+        prevIntv = (intv-1)*intvSkip+1;
+        nextIntv = intv*intvSkip+intvNum-1;
         
-        N = length(data);
-        len=(word_size_max-word_size_min)+1;
+        %     for s=1:size(ab) % sum up the indices or
+        %         pp=ab(s);
+        %         qq=cd(s);
+        %         qjtrial2=squeeze(double(newcom(pp,qq,(intv-1)*intvSkip+1:intv*intvSkip+intvNum)));
+        % newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
         
-        H=zeros(len+1,lst);
-        for ind = 1:len
-            L = word_size_min+ind-1;
-            n = counts(data,L);
-            % p = n/sum(n);
-            % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
-            % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
-            H(ind+1,q) = entropy_grassberger(n,N); % Grassberger estimate
+        coms_int = coms(prevIntv:nextIntv);
+        rp6=coms_int;
+        pred=double(rp6);
+        px=pred;
+        lent=size(pred);
+        prt=floor((lent/1.01));
+        bb=lent/prt;
+        lst=floor(bb);
+        h = zeros(lst,1);
+        E = zeros(lst,1);
+        L = zeros(lst,1);
+        
+        for q=1:lst
+            pxn=(px-mean(px))./(std(px));
+            size(pxn);
+            data = partition(pxn,width,ref);
+            
+            N = length(data);
+            len=(word_size_max-word_size_min)+1;
+            
+            H=zeros(len+1,lst);
+            for ind = 1:len
+                L = word_size_min+ind-1;
+                n = counts(data,L);
+                % p = n/sum(n);
+                % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
+                % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
+                H(ind+1,q) = entropy_grassberger(n,N); % Grassberger estimate
+                
+            end
+            
+            %% calculate entropy rate from block entropies
+            
+            
+            %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
+            %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
+            [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
             
         end
+        newarray=diff(H');
+        diffarray = diff(newarray(1,1:7));
+        mindiff = min(abs(diffarray));
         
-        %% calculate entropy rate from block entropies
+        wl = find(abs(diffarray)== mindiff);
+        wordlen = 5;
         
-        
-        %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
-        %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
-        [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
-        
+        yval(frame,intv)=newarray(wordlen);
     end
-    newarray=diff(H');
-    diffarray = diff(newarray(1,1:7));
-    mindiff = min(abs(diffarray));
-    
-    wl = find(abs(diffarray)== mindiff);
-    wordlen = wl+1;
-    
-    yval(1,intv)=newarray(wordlen);
 end

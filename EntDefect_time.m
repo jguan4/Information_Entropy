@@ -41,8 +41,8 @@ T=size(videoData,1);
 Tt = size(inds,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-intvNum = 40;
-intvSkip=1;
+intvNum = 100;
+intvSkip=16;
 criteria = 10;
 
 totalIntv=floor((Tt-intvNum)/intvSkip);
