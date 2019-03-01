@@ -8,7 +8,7 @@ savepath='E:\JJ Data\New Data\1_24_19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
-for m=2:mnums
+for m=2:mnum
     load(strcat(path,'\',flist(m+2).name))
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));

@@ -45,8 +45,8 @@ criteria = 10;
 int_len = 30;
 intvSkip = 5;
 
-% totalIntv=floor((X*Y-int_len)/intvSkip);
-totalIntv=1;
+totalIntv=floor((X*Y-int_len)/intvSkip);
+% totalIntv=1;
 yval=zeros(T,totalIntv);
 
 for frame = 1:T
