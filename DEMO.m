@@ -8,7 +8,7 @@ savepath='E:\JJ Data\New Data\1_24_19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
-for m=2:mnum
+for m=2:mnums
     load(strcat(path,'\',flist(m+2).name))
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
@@ -25,16 +25,16 @@ for m=2:mnum
     [time_inds]=findDefect(videoData, fras, time_n_ahead);
     [space_inds]=findDefect(videoData, fras, space_n_ahead);
     tic
-    [Vout,Iout,P] =  vc_post_new(Vin,Iin,period);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'Vout','Iout','P');
-    fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
-    toc
+%     [Vout,Iout,P] =  vc_post_new(Vin,Iin,period);
+%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'Vout','Iout','P');
+%     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
+%     toc
     space_yval=EntDefect_space(videoData,fras,space_inds, full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'),'space_yval','-v7.3');
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_new.mat'),'space_yval','-v7.3');
     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
     toc
     time_yval = EntDefect_time(videoData,fras,time_inds,full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'),'time_yval','-v7.3');
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_new.mat'),'time_yval','-v7.3');
     fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
     toc
 %     com_h = compression_h(videoData,fras,space_n_ahead, space_inds, full);
