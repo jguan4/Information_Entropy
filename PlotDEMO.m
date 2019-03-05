@@ -20,8 +20,8 @@ for m=1:mnum
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
     if full ==1
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_new.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_new.mat'));
         %         load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     else
         load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'.mat'));
@@ -34,14 +34,19 @@ for m=1:mnum
     sizeInd_space = length(space_yval);
     P_resize = resample(P,sizeT,sizeP);
     P_filter = filter(b,a,P);
-    time_h_ave = squeeze(mean(mean(time_yval,2),3));
+    time_h_ave = [];
+    for i=1:size(time_yval,1)
+        temp = squeeze(time_yval(i,:,:));
+        time_h_ave(i) = (sum(sum(temp)))/nnz(temp);
+    end
+    space_yval_ave = squeeze(mean(space_yval,2));
     figure
     title(strcat(trial_stamp,time_stamp, ' full=', num2str(full)))
     subplot(3,1,1)
     plot(P_filter);
     title('Voltage')
     subplot(3,1,2)
-    plot(space_yval);
+    plot(space_yval_ave);
     xlim([0 sizeInd_space])
     title(strcat('Space h_', num2str(space_n_ahead),' full=', num2str(full)))
     subplot(3,1,3)
