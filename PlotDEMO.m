@@ -15,7 +15,7 @@ a = 1;
 n_average = 8000;
 b = ones([1,n_average])/n_average;
 
-for m=1:mnum
+for m=1
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));

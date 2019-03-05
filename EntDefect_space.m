@@ -46,7 +46,8 @@ int_len = 30;
 intvSkip = 5;
 
 totalIntv=floor((X*Y-int_len)/intvSkip);
-yval=zeros(1,totalIntv);
+% totalIntv=1;
+yval=zeros(T,totalIntv);
 
 for frame = 1:T
     switch full
@@ -65,7 +66,7 @@ for frame = 1:T
     coms=reshape(coms,[1 X*Y]);
     for intv=1:totalIntv
         prevIntv = (intv-1)*intvSkip+1;
-        nextIntv = intv*intvSkip+intvNum-1;
+        nextIntv = intv*intvSkip+int_len-1;
         
         %     for s=1:size(ab) % sum up the indices or
         %         pp=ab(s);
@@ -74,6 +75,7 @@ for frame = 1:T
         % newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
         
         coms_int = coms(prevIntv:nextIntv);
+%         coms_int = coms;
         rp6=coms_int;
         pred=double(rp6);
         px=pred;
