@@ -15,13 +15,13 @@ a = 1;
 n_average = 8000;
 b = ones([1,n_average])/n_average;
 
-for m=1
+for m=1:5
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
     if full ==1
         load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_new.mat'));
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_new.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_new2.mat'));
         %         load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     else
         load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'.mat'));
@@ -30,16 +30,16 @@ for m=1
     end
     sizeT = length(space_yval);
     sizeP = length(Vout);
-    sizeInd_time = length(time_yval);
-    sizeInd_space = length(space_yval);
-    P_resize = resample(P,sizeT,sizeP);
+    sizeInd_time = size(time_yval,1);
+    sizeInd_space = size(space_yval,1);
+%     P_resize = resample(P,sizeT,sizeP);
     P_filter = filter(b,a,P);
     time_h_ave = [];
     for i=1:size(time_yval,1)
         temp = squeeze(time_yval(i,:,:));
         time_h_ave(i) = (sum(sum(temp)))/nnz(temp);
     end
-    space_yval_ave = squeeze(mean(space_yval,2));
+    space_yval_ave = -squeeze(mean(space_yval,2));
     figure
     title(strcat(trial_stamp,time_stamp, ' full=', num2str(full)))
     subplot(3,1,1)

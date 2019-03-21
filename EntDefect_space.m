@@ -44,12 +44,14 @@ Y=size(videoData,3);
 criteria = 10;
 int_len = 30;
 intvSkip = 5;
+frameSkip = 5;
+fcount = 1;
 
 totalIntv=floor((X*Y-int_len)/intvSkip);
 % totalIntv=1;
-yval=zeros(T,totalIntv);
+yval=zeros(T/frameSkip,totalIntv);
 
-for frame = 1:T
+for frame = 1:frameSkip:T
     switch full
         case 1
             %             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
@@ -121,6 +123,7 @@ for frame = 1:T
         wl = find(abs(diffarray)== mindiff);
         wordlen = 5;
         
-        yval(frame,intv)=newarray(wordlen);
+        yval(fcount,intv)=newarray(wordlen);
+        fcount = fcount + 1;
     end
 end
