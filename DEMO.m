@@ -1,14 +1,16 @@
 clear all;
 format long;
 
-path='E:\JJ Data\New Data\3-20-19\Data';
-savepath='E:\JJ Data\New Data\3-20-19\Result';
+% path='E:\JJ Data\New Data\3-20-19\Data';
+% savepath='E:\JJ Data\New Data\3-20-19\Result';
 % path='D:\Documents\GMU\Research\Entropy Project\New Data\v_const\RawData';
 % savepath='D:\Documents\GMU\Research\Entropy Project\New Data\v_const\Result';
+path='C:\Users\blackhawk\Desktop\JJ\Data';
+savepath='C:\Users\blackhawk\Desktop\JJ\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
-for m=1:mnum
+for m=2:mnum
     load(strcat(path,'\',flist(m+2).name))
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
@@ -37,6 +39,7 @@ for m=1:mnum
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_new2.mat'),'time_yval','-v7.3');
     fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
     toc
+    SendEmail
 %     com_h = compression_h(videoData,fras,space_n_ahead, space_inds, full);
 %     save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'),'com_h');
 %     fprintf(strcat('for calculating compression h of  ',flist(m+2).name,'\n'))
