@@ -59,12 +59,10 @@ for intv=1:totalIntv
             [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
             lin_ind=sub2ind([X, Y],ab,cd);
     end
+    clear ab cd
     %     for s=1:length(lin_ind)
     %         ind_s=lin_ind(s);
-    qjtrial2=squeeze(double(videoData(prevIntv:nextIntv,lin_ind)));
-    rp6=qjtrial2;
-    pred=double(rp6);
-    px=pred;
+    pred=double(squeeze(double(videoData(prevIntv:nextIntv,lin_ind))));
     lent=size(pred,1);
     prt=floor((lent/1.01));
     bb=lent/prt;
@@ -73,7 +71,7 @@ for intv=1:totalIntv
     %         E = zeros(lst,1);
     %         L = zeros(lst,1)
     
-    pxn=(px-mean(px))./(std(px));
+    pxn=(pred-mean(pred))./(std(pred));
     data = partition(pxn,width,ref);
     
     N = size(data,1);
@@ -110,6 +108,7 @@ for intv=1:totalIntv
     col = 1:length(lin_ind);
 
     yval(intv,lin_ind)=squeeze(newarray(sub2ind(size(newarray),wordlen,col)));
+    clear pred lin_ind
 
     %     end
 end

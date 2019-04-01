@@ -54,7 +54,7 @@ for frame = 1:T
         case 1
             %             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
             %             coms=newcom;
-            coms = squeeze(videoData(frame, :, :));
+            temp_com = squeeze(videoData(frame, :, :));
         case 0
             newcom=squeeze(sum(inds(frame, :, :),1));
             videocom = squeeze(videoData(frame, :, :));
@@ -63,7 +63,8 @@ for frame = 1:T
             coms=zeros(size(newcom));
             coms(lin_ind)=videocom(lin_ind);
     end
-    coms=reshape(coms,[1 X*Y]);
+    coms=reshape(temp_com,[1 X*Y]);
+    clear temp_com
     for intv=1:totalIntv
         prevIntv = (intv-1)*intvSkip+1;
         nextIntv = intv*intvSkip+int_len-1;
@@ -74,11 +75,8 @@ for frame = 1:T
         %         qjtrial2=squeeze(double(newcom(pp,qq,(intv-1)*intvSkip+1:intv*intvSkip+intvNum)));
         % newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
         
-        coms_int = coms(prevIntv:nextIntv);
+        pred = double(coms(prevIntv:nextIntv));
 %         coms_int = coms;
-        rp6=coms_int;
-        pred=double(rp6);
-        px=pred;
         lent=size(pred);
         prt=floor((lent/1.01));
         bb=lent/prt;
@@ -88,7 +86,7 @@ for frame = 1:T
         L = zeros(lst,1);
         
         for q=1:lst
-            pxn=(px-mean(px))./(std(px));
+            pxn=(pred-mean(pred))./(std(pred));
             size(pxn);
             data = partition(pxn,width,ref);
             
@@ -115,12 +113,12 @@ for frame = 1:T
             
         end
         newarray=diff(H');
-        diffarray = diff(newarray(1,1:7));
-        mindiff = min(abs(diffarray));
-        
-        wl = find(abs(diffarray)== mindiff);
+%         diffarray = diff(newarray(1,1:7));
+%         mindiff = min(abs(diffarray));
         wordlen = 5;
         
         yval(frame,intv)=newarray(wordlen);
+        clear pred
     end
+    clear coms
 end
