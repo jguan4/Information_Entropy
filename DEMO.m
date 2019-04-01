@@ -5,8 +5,8 @@ format long;
 % savepath='E:\JJ Data\New Data\3-20-19\Result';
 % path='D:\Documents\GMU\Research\Entropy Project\New Data\v_const\RawData';
 % savepath='D:\Documents\GMU\Research\Entropy Project\New Data\v_const\Result';
-path='C:\Users\blackhawk\Desktop\JJ\Data';
-savepath='C:\Users\blackhawk\Desktop\JJ\Result';
+path='F:\JJ\3-20-19\small sample steady';
+savepath='F:\JJ\3-20-19\small sample steady result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -25,13 +25,13 @@ for m=1:mnum
     space_n_ahead = 2;
     full = 1;
     [time_inds]=findDefect(videoData, fras, time_n_ahead);
-    [space_inds]=findDefect(videoData, fras, space_n_ahead);
+%     [space_inds]=findDefect(videoData, fras, space_n_ahead);
     tic
 %     [Vout,Iout,P] =  vc_post_new(Vin,Iin,period);
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'power_data');
     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
     toc
-    space_yval=EntDefect_space(videoData,fras,space_inds, full);
+    space_yval=EntDefect_space(videoData,fras,~, full);
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_new.mat'),'space_yval','-v7.3');
     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
     clear space_inds space_yval
