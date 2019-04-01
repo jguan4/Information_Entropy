@@ -24,9 +24,9 @@
 % the program relies on the following additional MATLAB programs:
 % partition.m, counts.m, entropy_miller.m, entropy_grassberger.m, get_entropy_rate.m
 
-function yval=EntDefect_space(videoData,fras,inds,full)
+function yval=EntDefect_space(videoData,fras,full)
 
-clearvars -except newcom numd inds videoData fras full
+clearvars -except newcom numd videoData fras full
 format long
 
 width = 10; % size of partitions
@@ -38,7 +38,6 @@ word_size_min = 1; % min word length
 word_size_max = 9; % max word length
 
 T=size(videoData,1);
-Tt = size(inds,1);
 X=size(videoData,2);
 Y=size(videoData,3);
 criteria = 10;
@@ -58,12 +57,12 @@ for frame = 1:frameSkip:T
             %             coms=newcom;
             temp_com = squeeze(videoData(frame, :, :));
         case 0
-            newcom=squeeze(sum(inds(frame, :, :),1));
-            videocom = squeeze(videoData(frame, :, :));
-            [ab,cd]=find(newcom>criteria);
-            lin_ind=sub2ind(size(newcom),ab,cd);
-            coms=zeros(size(newcom));
-            coms(lin_ind)=videocom(lin_ind);
+%             newcom=squeeze(sum(inds(frame, :, :),1));
+%             videocom = squeeze(videoData(frame, :, :));
+%             [ab,cd]=find(newcom>criteria);
+%             lin_ind=sub2ind(size(newcom),ab,cd);
+%             coms=zeros(size(newcom));
+%             coms(lin_ind)=videocom(lin_ind);
     end
     coms=reshape(temp_com,[1 X*Y]);
     clear temp_com

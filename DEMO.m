@@ -31,7 +31,7 @@ for m=1:mnum
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'power_data');
     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
     toc
-    space_yval=EntDefect_space(videoData,fras,~, full);
+    space_yval=EntDefect_space(videoData,fras, full);
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_new.mat'),'space_yval','-v7.3');
     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
     clear space_inds space_yval
