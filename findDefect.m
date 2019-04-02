@@ -2,20 +2,18 @@ function [inds]=findDefect(videoData, fras,n_ahead)
 T=size(videoData,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-inds=zeros(T-fras*n_ahead,X,Y);
+inds=zeros(T-fras*n_ahead,X,Y,'int8');
 
 for i=1:T-(fras-1)*n_ahead
-    ind=zeros(X,Y);
     windowstd=squeeze(std(double(videoData(i:n_ahead:(i+n_ahead*(fras-1)),:,:)),0,1));
     windowmean=squeeze(mean(double(videoData(i:n_ahead:(i+n_ahead*(fras-1)),:,:)),1));
     window_scaled=windowstd./windowmean;
     wsmean=mean2(window_scaled);
     wsstd=std2(window_scaled);
     [rowi,coli]=find(window_scaled>(wsmean+wsstd*2));
-    for j=1:size(rowi)
-        ind(rowi(j),coli(j))=1;
-    end
-    inds(i,:,:)=ind;
+    lin_ind=sub2ind([X, Y],rowi,coli);
+    inds(i,lin_ind) = 1;
+    clear windowstd windowmean window_scaled wsmean wsstd rowi coli lin_ind
 end
 
 % totalIntv=(T-fras-intvNum)/intvSkip;
