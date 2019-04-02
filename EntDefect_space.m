@@ -24,9 +24,8 @@
 % the program relies on the following additional MATLAB programs:
 % partition.m, counts.m, entropy_miller.m, entropy_grassberger.m, get_entropy_rate.m
 
-function yval=EntDefect_space(videoData,fras,full)
+function yval=EntDefect_space(videoData,full)
 
-clearvars -except newcom numd videoData fras full
 format long
 
 width = 10; % size of partitions
@@ -40,11 +39,10 @@ word_size_max = 9; % max word length
 T=size(videoData,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-criteria = 10;
 int_len = 30;
 intvSkip = 5;
 frameSkip = 5;
-fcount = 1;
+wordlen = 5;
 
 totalIntv=floor((X*Y-int_len)/intvSkip);
 % totalIntv=1;
@@ -55,20 +53,17 @@ for frame = 1:frameSkip:T
         case 1
             %             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
             %             coms=newcom;
-            temp_com = squeeze(videoData(frame, :, :));
+            coms = reshape(squeeze(videoData(frame, :, :)),[1 X*Y]);
         case 0
-%             newcom=squeeze(sum(inds(frame, :, :),1));
-%             videocom = squeeze(videoData(frame, :, :));
-%             [ab,cd]=find(newcom>criteria);
-%             lin_ind=sub2ind(size(newcom),ab,cd);
-%             coms=zeros(size(newcom));
-%             coms(lin_ind)=videocom(lin_ind);
+            %             newcom=squeeze(sum(inds(frame, :, :),1));
+            %             videocom = squeeze(videoData(frame, :, :));
+            %             [ab,cd]=find(newcom>criteria);
+            %             lin_ind=sub2ind(size(newcom),ab,cd);
+            %             coms=zeros(size(newcom));
+            %             coms(lin_ind)=videocom(lin_ind);
     end
-    coms=reshape(temp_com,[1 X*Y]);
-    clear temp_com
+    
     for intv=1:totalIntv
-        prevIntv = (intv-1)*intvSkip+1;
-        nextIntv = intv*intvSkip+int_len-1;
         
         %     for s=1:size(ab) % sum up the indices or
         %         pp=ab(s);
@@ -76,19 +71,17 @@ for frame = 1:frameSkip:T
         %         qjtrial2=squeeze(double(newcom(pp,qq,(intv-1)*intvSkip+1:intv*intvSkip+intvNum)));
         % newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
         
-        pred = double(coms(prevIntv:nextIntv));
-%         coms_int = coms;
+        pred = double(coms((intv-1)*intvSkip+1:intv*intvSkip+int_len-1));
         lent=size(pred);
         prt=floor((lent/1.01));
         bb=lent/prt;
         lst=floor(bb);
-        h = zeros(lst,1);
-        E = zeros(lst,1);
-        L = zeros(lst,1);
+        %         h = zeros(lst,1);
+        %         E = zeros(lst,1);
+        %         L = zeros(lst,1);
         
         for q=1:lst
             pxn=(pred-mean(pred))./(std(pred));
-            size(pxn);
             data = partition(pxn,width,ref);
             
             N = length(data);
@@ -102,25 +95,20 @@ for frame = 1:frameSkip:T
                 % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
                 % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
                 H(ind+1,q) = entropy_grassberger(n,N); % Grassberger estimate
-                
             end
+            clear pxn data N len L n q
             
             %% calculate entropy rate from block entropies
-            
-            
             %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
             %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
-            [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
-            
+            % [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
         end
-        newarray=diff(H');
-%         diffarray = diff(newarray(1,1:7));
-%         mindiff = min(abs(diffarray));
-        wordlen = 5;
         
-        yval(fcount,intv)=newarray(wordlen);
-        fcount = fcount + 1;
-        clear pred
+        newarray=diff(H');
+        %         diffarray = diff(newarray(1,1:7));
+        %         mindiff = min(abs(diffarray));
+        yval(frame,intv)=newarray(wordlen);
+        clear newarray H pred lent prt bb lst
     end
-    clear coms
+     clear coms
 end

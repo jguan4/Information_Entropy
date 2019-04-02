@@ -24,9 +24,8 @@
 % the program relies on the following additional MATLAB programs:
 % partition.m, counts.m, entropy_miller.m, entropy_grassberger.m, get_entropy_rate.m
 
-function yval=EntDefect_time(videoData,fras,inds,full)
+function yval=EntDefect_time(videoData,inds,full)
 
-clearvars -except newcom numd inds videoData fras full
 format long
 
 width = 10; % size of partitions
@@ -55,24 +54,27 @@ for intv=1:totalIntv
         case 1
             [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>0);
             lin_ind=sub2ind([X, Y],ab,cd);
+            pred=double(squeeze(double(videoData(prevIntv:nextIntv,lin_ind))));
+            clear ab cd
         case 0
             [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
             lin_ind=sub2ind([X, Y],ab,cd);
     end
-    clear ab cd
+    
     %     for s=1:length(lin_ind)
     %         ind_s=lin_ind(s);
-    pred=double(squeeze(double(videoData(prevIntv:nextIntv,lin_ind))));
-    lent=size(pred,1);
-    prt=floor((lent/1.01));
-    bb=lent/prt;
-    lst=floor(bb);
-    %         h = zeros(lst,1);
-    %         E = zeros(lst,1);
-    %         L = zeros(lst,1)
+    %     lent=size(pred,1);
+    %     prt=floor((lent/1.01));
+    %     bb=lent/prt;
+    %     lst=floor(bb);
+    %     h = zeros(lst,1);
+    %     E = zeros(lst,1);
+    %     L = zeros(lst,1)
     
     pxn=(pred-mean(pred))./(std(pred));
+    clear pred
     data = partition(pxn,width,ref);
+    clear pxn
     
     N = size(data,1);
     num_data = size(data,2);
@@ -87,28 +89,21 @@ for intv=1:totalIntv
             % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
             % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
             H(ind+1,q) = entropy_grassberger(n,N); % Grassberger estimate
-            
         end
-        
         %% calculate entropy rate from block entropies
-        
-        
         %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
         %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
         %             [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
-        
     end
+    clear data
+    
     newarray=diff(H);
 %     diffarray = diff(newarray(2:7,:));
 %     [mindiff,mindiff_I] = min(abs(diffarray));
-    
 %     [row,col] = find(abs(diffarray)== mindiff);
 %     wordlen = row+1;
     wordlen = 4*ones([1,length(lin_ind)])+1;
     col = 1:length(lin_ind);
-
     yval(intv,lin_ind)=squeeze(newarray(sub2ind(size(newarray),wordlen,col)));
-    clear pred lin_ind
-
-    %     end
+    clear H newarray col wordlen lin_ind
 end
