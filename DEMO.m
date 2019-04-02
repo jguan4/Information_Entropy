@@ -24,9 +24,10 @@ for m=1:mnum
     time_n_ahead = 2;
     space_n_ahead = 2;
     full = 1;
+    tic
     [time_inds]=findDefect(videoData, fras, time_n_ahead);
 %     [space_inds]=findDefect(videoData, fras, space_n_ahead);
-    tic
+    toc
 %     [Vout,Iout,P] =  vc_post_new(Vin,Iin,period);
     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'power_data');
     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
