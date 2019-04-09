@@ -47,7 +47,7 @@ wordlen = 5;
 totalIntv=floor((X*Y-int_len)/intvSkip);
 % totalIntv=1;
 yval=zeros(T/frameSkip,totalIntv);
-
+fcount = 1;
 for frame = 1:frameSkip:T
     switch full
         case 1
@@ -107,8 +107,9 @@ for frame = 1:frameSkip:T
         newarray=diff(H');
         %         diffarray = diff(newarray(1,1:7));
         %         mindiff = min(abs(diffarray));
-        yval(frame,intv)=newarray(wordlen);
+        yval(fcount,intv)=newarray(wordlen);
         clear newarray H pred lent prt bb lst
     end
+    fcount = fcount+1
      clear coms
 end

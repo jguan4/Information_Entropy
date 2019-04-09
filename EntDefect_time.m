@@ -48,6 +48,7 @@ totalIntv=floor((Tt-intvNum)/intvSkip);
 yval=zeros([totalIntv,X,Y]);
 
 for intv=1:totalIntv
+    intv = intv
     prevIntv = (intv-1)*intvSkip+1;
     nextIntv = intv*intvSkip+intvNum;
     switch full
