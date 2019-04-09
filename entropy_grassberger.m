@@ -9,4 +9,4 @@ function H = entropy_grassberger(n,N);
 %
 %
 
-H = sum((n/N).*(log(N) - psi(0,n) - (1./n).*real((-1).^(n))./(n+1)));
+H = nansum((n/N).* (log(N) - psi(0,n) - real((-1).^(n).*(1./n).*(1./(n+1)))));

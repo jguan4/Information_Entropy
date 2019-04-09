@@ -42,11 +42,13 @@ Y=size(videoData,3);
 int_len = 30;
 intvSkip = 5;
 frameSkip = 5;
-wordlen = 5;
 
 totalIntv=floor((X*Y-int_len)/intvSkip);
-% totalIntv=1;
-yval=zeros(T/frameSkip,totalIntv);
+invRange = 0:int_len-1;
+intv = 1:totalIntv;
+invInd = repmat(invRange,[totalIntv,1])+ repmat((intv'-1).*intvSkip+1,[1,int_len]);
+yval=zeros(ceil(T/frameSkip),totalIntv);
+
 fcount = 1;
 for frame = 1:frameSkip:T
     switch full
@@ -63,53 +65,53 @@ for frame = 1:frameSkip:T
             %             coms(lin_ind)=videocom(lin_ind);
     end
     
-    for intv=1:totalIntv
-        
-        %     for s=1:size(ab) % sum up the indices or
-        %         pp=ab(s);
-        %         qq=cd(s);
-        %         qjtrial2=squeeze(double(newcom(pp,qq,(intv-1)*intvSkip+1:intv*intvSkip+intvNum)));
-        % newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
-        
-        pred = double(coms((intv-1)*intvSkip+1:intv*intvSkip+int_len-1));
-        lent=size(pred);
-        prt=floor((lent/1.01));
-        bb=lent/prt;
-        lst=floor(bb);
-        %         h = zeros(lst,1);
-        %         E = zeros(lst,1);
-        %         L = zeros(lst,1);
-        
-        for q=1:lst
-            pxn=(pred-mean(pred))./(std(pred));
-            data = partition(pxn,width,ref);
-            
-            N = length(data);
-            len=(word_size_max-word_size_min)+1;
-            
-            H=zeros(len+1,lst);
-            for ind = 1:len
-                L = word_size_min+ind-1;
-                n = counts(data,L);
-                % p = n/sum(n);
-                % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
-                % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
-                H(ind+1,q) = entropy_grassberger(n,N); % Grassberger estimate
-            end
-            clear pxn data N len L n q
-            
-            %% calculate entropy rate from block entropies
-            %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
-            %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
-            % [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
-        end
-        
-        newarray=diff(H');
-        %         diffarray = diff(newarray(1,1:7));
-        %         mindiff = min(abs(diffarray));
-        yval(fcount,intv)=newarray(wordlen);
-        clear newarray H pred lent prt bb lst
+    %     for s=1:size(ab) % sum up the indices or
+    %         pp=ab(s);
+    %         qq=cd(s);
+    %         qjtrial2=squeeze(double(newcom(pp,qq,(intv-1)*intvSkip+1:intv*intvSkip+intvNum)));
+    %         newcom=imgaussfilt(reshape(newcom,[1 X*Y]));
+    %         pred = double(coms((intv-1)*intvSkip+1:intv*intvSkip+int_len-1));
+    %         lent=size(pred);
+    %         prt=floor((lent/1.01));
+    %         bb=lent/prt;
+    %         lst=floor(bb);
+    %         h = zeros(lst,1);
+    %         E = zeros(lst,1);
+    %         L = zeros(lst,1);
+    
+    pred = double(coms(invInd))';
+    pxn=(pred-mean(pred))./(std(pred));
+    clear pred
+    data = partition(pxn,width,ref);
+    clear pxn
+    
+    N = size(data,1);
+    num_data = size(data,2);
+    len=(word_size_max-word_size_min)+1;
+    
+    H=zeros(len+1,num_data);
+    for ind = 1:len
+        L = word_size_min+ind-1;
+        n = counts(data,L);
+        % p = n/sum(n);
+        % H(1,ind+1,q) = -sum(p.*log(p)); % naive entropy estimate
+        % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
+        H(ind+1,:) = entropy_grassberger(n,N); % Grassberger estimate
     end
+    clear data N len L n q
+    
+    %% calculate entropy rate from block entropies
+    %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
+    %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
+    % [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
+    %         end
+    
+    newarray=diff(H);
+    %         diffarray = diff(newarray(1,1:7));
+    %         mindiff = min(abs(diffarray));
+    wordlen = 4*ones([1,totalIntv])+1;
+    col = 1:totalIntv;
+    yval(fcount,:)=squeeze(newarray(sub2ind(size(newarray),wordlen,col)));
     fcount = fcount+1
-     clear coms
+    clear newarray H coms
 end
