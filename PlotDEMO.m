@@ -19,7 +19,7 @@ a = 1;
 n_average = 8000;
 b = ones([1,n_average])/n_average;
 
-for m=1:5
+for m=1:mnum
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
@@ -33,22 +33,23 @@ for m=1:5
         load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_',num2str(space_n_ahead),'_active.mat'));
     end
     sizeT = length(space_yval);
-    sizeP = length(Vout);
+    
     sizeInd_time = size(time_yval,1);
     sizeInd_space = size(space_yval,1);
 %     P_resize = resample(P,sizeT,sizeP);
-    P = power_data(2,:);
+    P = power_data(1,:);
+    sizeP = length(P);
     P_filter = filter(b,a,P);
     time_h_ave = [];
     for i=1:size(time_yval,1)
         temp = squeeze(time_yval(i,:,:));
         time_h_ave(i) = (sum(sum(temp)))/nnz(temp);
     end
-    space_yval_ave = -squeeze(mean(space_yval,2));
+    space_yval_ave = squeeze(mean(space_yval,2));
     figure
     title(strcat(trial_stamp,time_stamp, ' full=', num2str(full)))
     subplot(3,1,1)
-    plot(P_filter);
+    plot(P_filter(n_average+1:end));
     title('Voltage')
     subplot(3,1,2)
     plot(space_yval_ave);
