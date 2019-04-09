@@ -3,8 +3,12 @@ format long;
 
 % path='E:\JJ Data\New Data\v_const\RawData';
 % savepath='E:\JJ Data\New Data\v_const\Result_new_1';
-path='E:\JJ Data\New Data\1_24_19\RawData';
-savepath='E:\JJ Data\New Data\1_24_19\Result';
+% path='E:\JJ Data\New Data\1_24_19\RawData';
+% savepath='E:\JJ Data\New Data\1_24_19\Result';
+
+path='F:\JJ\3-20-19\small sample steady';
+savepath='F:\JJ\3-20-19\small sample steady result';
+
 flist=dir(path);
 mnum=size(flist,1)-2;
 time_n_ahead = 2;
@@ -33,6 +37,7 @@ for m=1:5
     sizeInd_time = size(time_yval,1);
     sizeInd_space = size(space_yval,1);
 %     P_resize = resample(P,sizeT,sizeP);
+    P = power_data(2,:);
     P_filter = filter(b,a,P);
     time_h_ave = [];
     for i=1:size(time_yval,1)
