@@ -1,8 +1,8 @@
 clear all;
 format long;
 
-% path='E:\JJ Data\New Data\3-20-19\Data';
-% savepath='E:\JJ Data\New Data\3-20-19\Result';
+path='E:\JJ Data\New Data\3-20-19\Data';
+savepath='E:\JJ Data\New Data\3-20-19\Result';
 % path='D:\Documents\GMU\Research\Entropy Project\New Data\small sample steady';
 % savepath='D:\Documents\GMU\Research\Entropy Project\New Data\Temp';
 % path='F:\JJ\3-20-19\small sample steady';
