@@ -46,8 +46,9 @@ frameSkip = 5;
 totalIntv=floor((X*Y-int_len)/intvSkip);
 invRange = 0:int_len-1;
 intv = 1:totalIntv;
-invInd = repmat(invRange,[totalIntv,1])+ repmat((intv'-1).*intvSkip+1,[1,int_len]);
+invInd = int16(repmat(invRange,[totalIntv,1])+ repmat((intv'-1).*intvSkip+1,[1,int_len]));
 yval=zeros(ceil(T/frameSkip),totalIntv);
+clear intv invRange
 
 fcount = 1;
 for frame = 1:frameSkip:T

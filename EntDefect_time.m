@@ -95,7 +95,7 @@ for intv=1:totalIntv
         %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
         %             [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
 %     end
-    clear data
+    clear data n
     
     newarray=diff(H);
 %     diffarray = diff(newarray(2:7,:));
