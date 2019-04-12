@@ -40,7 +40,7 @@ for m=1:mnum
     P = power_data(1,:);
     sizeP = length(P);
     P_filter = filter(b,a,P);
-    time_h_ave = [];
+    time_h_ave = zeros(sizeInd_time);
     for i=1:size(time_yval,1)
         temp = squeeze(time_yval(i,:,:));
         time_h_ave(i) = (sum(sum(temp)))/nnz(temp);
@@ -50,7 +50,7 @@ for m=1:mnum
     title(strcat(trial_stamp,time_stamp, ' full=', num2str(full)))
     subplot(3,1,1)
     plot(P_filter(n_average+1:end));
-    title('Voltage')
+    title('Voltage')2
     subplot(3,1,2)
     plot(space_yval_ave);
     xlim([0 sizeInd_space])

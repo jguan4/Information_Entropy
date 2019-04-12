@@ -4,8 +4,11 @@ format long;
 % Data file path
 % path='E:\JJ Data\New Data\v_const\RawData';
 % savepath='E:\JJ Data\New Data\v_const\Result_new_1';
-path='E:\JJ Data\New Data\1_24_19\RawData';
-savepath='E:\JJ Data\New Data\1_24_19\Result';
+% path='E:\JJ Data\New Data\1_24_19\RawData';
+% savepath='E:\JJ Data\New Data\1_24_19\Result';
+path='F:\JJ\3-20-19\small sample steady';
+savepath='F:\JJ\3-20-19\small sample steady result';
+
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -35,12 +38,12 @@ for m=1:6
     %     load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     
     % Get data parameters and adjust entropy
-    sizeT = length(space_yval);
     sizeInd_time = size(time_yval,1);
     sizeInd_space = size(space_yval,1);
-    %     P_resize = resample(P,sizeT,sizeP);
+    ss = min(sizeInd_time,sizeInd_space);
+    P = power_data(1,:);
     P_filter = filter(b,a,P);
-    time_h_ave = [];
+    time_h_ave = zeros(sizeInd_time);
     for i=1:size(time_yval,1)
         temp = squeeze(time_yval(i,:,:));
         time_h_ave(i) = (sum(sum(temp)))/nnz(temp);
@@ -48,25 +51,25 @@ for m=1:6
     space_yval_ave = squeeze(mean(space_yval,2));
     P_filter_cut = P_filter(n_average+1:end);
     sizeP = length(P_filter_cut);
-    P_resize = resample(P_filter_cut,sizeInd_time,sizeP);
-    space_yval_resize = resample(space_yval_ave, sizeInd_time,sizeInd_space);
-    
-    space_yval_resize_n = (space_yval_resize-mean(space_yval_resize))./std(space_yval_resize);
-    time_h_ave_n = (time_h_ave-mean(time_h_ave))./std(time_h_ave);
+    P_resize = resample(P_filter_cut,ss,sizeP);
     P_resize_n =( P_resize-mean(P_resize))./std(P_resize);
-    
-    [t_s_c, t_s_lags] = xcov(time_h_ave,space_yval_resize,'coeff');
+    space_yval_resize = resample(space_yval_ave, ss,sizeInd_space);
+    space_yval_resize_n = (space_yval_resize-mean(space_yval_resize))./std(space_yval_resize);
+    time_h_ave_resize = resample(time_h_ave, ss,sizeInd_time);
+    time_h_ave_resize_n = (time_h_ave_resize-mean(time_h_ave_resize))./std(time_h_ave_resize);
+
+    [t_s_c, t_s_lags] = xcov(time_h_ave_resize,space_yval_resize,'coeff');
     t_s_corr(arr_ind,:) = t_s_c;
     [M,I]=max(abs(t_s_c));
     t_s_corr_lag(arr_ind,:) = [t_s_c(I) t_s_lags(I)];
     
-%     [p_s_c, p_s_lags] = xcov(P_resize(2:end),space_yval_resize_n,'coeff');
-%     [M,I]=max(abs(p_s_c));
-%     p_s_corr_lag(arr_ind,:) = [p_s_c(I) p_s_lags(I)];
-%     
-%     [p_t_c, p_t_lags] = xcov(P_resize(2:end),time_h_ave_n,'coeff');
-%     [M,I]=max(abs(p_t_c));
-%     p_t_corr_lag(arr_ind,:) = [ p_t_c(I) p_t_lags(I)];
+    [p_s_c, p_s_lags] = xcov(P_resize(2:end),space_yval_resize_n,'coeff');
+    [M,I]=max(abs(p_s_c));
+    p_s_corr_lag(arr_ind,:) = [p_s_c(I) p_s_lags(I)];
+    
+    [p_t_c, p_t_lags] = xcov(P_resize(2:end),time_h_ave_resize_n,'coeff');
+    [M,I]=max(abs(p_t_c));
+    p_t_corr_lag(arr_ind,:) = [ p_t_c(I) p_t_lags(I)];
     
     arr_ind = arr_ind + 1;
     
@@ -82,16 +85,16 @@ for m=1:6
 %     title('Power vs. Time');
 %     drawnow;
     
-%     figure;
-%     subplot(3,1,1)
-%     plot(t_s_lags,t_s_c);
-%     title('Time vs. Space');
-%     subplot(3,1,2)
-%     plot(p_s_lags,p_s_c);
-%     title('Power vs. Space');
-%     subplot(3,1,3)
-%     plot(p_t_lags,p_t_c);
-%     title('Power vs. Time');
+    figure;
+    subplot(3,1,1)
+    plot(t_s_lags,t_s_c);
+    title('Time vs. Space');
+    subplot(3,1,2)
+    plot(p_s_lags,p_s_c);
+    title('Power vs. Space');
+    subplot(3,1,3)
+    plot(p_t_lags,p_t_c);
+    title('Power vs. Time');
     
 %     
 %     figure(10);

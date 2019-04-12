@@ -90,18 +90,17 @@ for intv=1:totalIntv
         % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
         H(ind+1,:) = entropy_grassberger(n,N); % Grassberger estimate
     end
-        %% calculate entropy rate from block entropies
-        %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
-        %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
-        %             [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
-%     end
+    %% calculate entropy rate from block entropies
+    %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
+    %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
+    %             [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
     clear data n
     
     newarray=diff(H);
-%     diffarray = diff(newarray(2:7,:));
-%     [mindiff,mindiff_I] = min(abs(diffarray));
-%     [row,col] = find(abs(diffarray)== mindiff);
-%     wordlen = row+1;
+    %     diffarray = diff(newarray(2:7,:));
+    %     [mindiff,mindiff_I] = min(abs(diffarray));
+    %     [row,col] = find(abs(diffarray)== mindiff);
+    %     wordlen = row+1;
     wordlen = 4*ones([1,length(lin_ind)])+1;
     col = 1:length(lin_ind);
     yval(intv,lin_ind)=squeeze(newarray(sub2ind(size(newarray),wordlen,col)));
