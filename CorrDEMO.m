@@ -4,11 +4,13 @@ format long;
 % Data file path
 % path='E:\JJ Data\New Data\v_const\RawData';
 % savepath='E:\JJ Data\New Data\v_const\Result_new_1';
-path='E:\JJ Data\New Data\3-20-19\Data';
-savepath='E:\JJ Data\New Data\3-20-19\Result';
+% path='E:\JJ Data\New Data\3-20-19\Data';
+% savepath='E:\JJ Data\New Data\3-20-19\Result';
 % path='F:\JJ\3-20-19\small sample steady';
 % savepath='F:\JJ\3-20-19\small sample steady result';
 
+path ='E:\JJ Data\New Data\4-2-19\Data';
+savepath ='E:\JJ Data\New Data\4-2-19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -34,15 +36,15 @@ for m=1:mnum
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
-    load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_new.mat'));
-    load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_new2.mat'));
+    load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
+    load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'));
     %     load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     
     % Get data parameters and adjust entropy
     sizeInd_time = size(time_yval,1);
     sizeInd_space = size(space_yval,1);
     ss = min(sizeInd_time,sizeInd_space);
-    P = power_data(1,:);
+    P = power_data(2,:);
     P_filter = filter(b,a,P);
     time_h_ave = zeros([1,sizeInd_time]);
     for i=1:size(time_yval,1)

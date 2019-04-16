@@ -5,10 +5,11 @@ format long;
 % savepath='E:\JJ Data\New Data\v_const\Result_new_1';
 % path='E:\JJ Data\New Data\1_24_19\RawData';
 % savepath='E:\JJ Data\New Data\1_24_19\Result';
+% path='F:\JJ\3-20-19\small sample steady';
+% savepath='F:\JJ\3-20-19\small sample steady result';
 
-path='F:\JJ\3-20-19\small sample steady';
-savepath='F:\JJ\3-20-19\small sample steady result';
-
+path ='E:\JJ Data\New Data\4-2-19\Data';
+savepath ='E:\JJ Data\New Data\4-2-19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 time_n_ahead = 2;
@@ -24,8 +25,8 @@ for m=1:mnum
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
     if full ==1
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_new.mat'));
-        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_new2.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
+        load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'));
         %         load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     else
         load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_',num2str(space_n_ahead),'.mat'));
@@ -37,7 +38,7 @@ for m=1:mnum
     sizeInd_time = size(time_yval,1);
     sizeInd_space = size(space_yval,1);
 %     P_resize = resample(P,sizeT,sizeP);
-    P = power_data(1,:);
+    P = power_data(2,:);
     sizeP = length(P);
     P_filter = filter(b,a,P);
     time_h_ave = zeros(sizeInd_time);
@@ -50,7 +51,7 @@ for m=1:mnum
     title(strcat(trial_stamp,time_stamp, ' full=', num2str(full)))
     subplot(3,1,1)
     plot(P_filter(n_average+1:end));
-    title('Voltage')2
+    title('Voltage')
     subplot(3,1,2)
     plot(space_yval_ave);
     xlim([0 sizeInd_space])
