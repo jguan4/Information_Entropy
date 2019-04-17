@@ -24,7 +24,7 @@
 % the program relies on the following additional MATLAB programs:
 % partition.m, counts.m, entropy_miller.m, entropy_grassberger.m, get_entropy_rate.m
 
-function yval=EntDefect_time(videoData,inds,full)
+function yval=EntDefect_time(videoData,full)
 
 format long
 
@@ -37,29 +37,29 @@ word_size_min = 1; % min word length
 word_size_max = 9; % max word length
 
 T=size(videoData,1);
-Tt = size(inds,1);
 X=size(videoData,2);
 Y=size(videoData,3);
 intvNum = 100;
 intvSkip = 4;
 criteria = 10;
 
-totalIntv=floor((Tt-intvNum)/intvSkip);
-yval=zeros([totalIntv,X,Y]);
+totalIntv=floor((T-intvNum)/intvSkip)+1;
+yval=zeros([totalIntv,X*Y]);
 
 for intv=1:totalIntv
     intv = intv
     prevIntv = (intv-1)*intvSkip+1;
-    nextIntv = (intv-1)*intvSkip+1+intvNum;
+    nextIntv = (intv-1)*intvSkip+intvNum;
     switch full
         case 1
-            [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>0);
-            lin_ind=sub2ind([X, Y],ab,cd);
-            pred=double(squeeze(double(videoData(prevIntv:nextIntv,lin_ind))));
-            clear ab cd
-        case 0
-            [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
-            lin_ind=sub2ind([X, Y],ab,cd);
+%             [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>0);
+%             lin_ind=sub2ind([X, Y],ab,cd);
+            pred=squeeze(double(videoData(prevIntv:nextIntv,:,:)));
+            ppred = reshape(pred,[intvNum,X*Y]);
+            clear pred
+%         case 0
+%             [ab,cd]=find(squeeze(sum(inds(prevIntv:nextIntv, :, :),1))>criteria);
+%             lin_ind=sub2ind([X, Y],ab,cd);
     end
     
     %     for s=1:length(lin_ind)
@@ -72,8 +72,8 @@ for intv=1:totalIntv
     %     E = zeros(lst,1);
     %     L = zeros(lst,1)
     
-    pxn=(pred-mean(pred))./(std(pred));
-    clear pred
+    pxn=(ppred-mean(ppred))./(std(ppred));
+    clear ppred
     data = partition(pxn,width,ref);
     clear pxn
     
@@ -101,8 +101,8 @@ for intv=1:totalIntv
     %     [mindiff,mindiff_I] = min(abs(diffarray));
     %     [row,col] = find(abs(diffarray)== mindiff);
     %     wordlen = row+1;
-    wordlen = 4*ones([1,length(lin_ind)])+1;
-    col = 1:length(lin_ind);
-    yval(intv,lin_ind)=squeeze(newarray(sub2ind(size(newarray),wordlen,col)));
-    clear H newarray col wordlen lin_ind
+%     wordlen = 4*ones([1,length(lin_ind)])+1;
+%     col = 1:length(lin_ind);
+    yval(intv,:)=squeeze(newarray(5,:));
+    clear H newarray
 end
