@@ -43,10 +43,10 @@ int_len = 30;
 intvSkip = 5;
 frameSkip = 5;
 
-totalIntv=floor((X*Y-int_len)/intvSkip);
+totalIntv=floor((X*Y-int_len)/intvSkip)+1;
 invRange = 0:int_len-1;
 intv = 1:totalIntv;
-invInd = int16(repmat(invRange,[totalIntv,1])+ repmat((intv'-1).*intvSkip+1,[1,int_len]));
+invInd = int32(repmat(invRange,[totalIntv,1])+ repmat((intv'-1).*intvSkip+1,[1,int_len]));
 yval=zeros(ceil(T/frameSkip),totalIntv);
 clear intv invRange
 
