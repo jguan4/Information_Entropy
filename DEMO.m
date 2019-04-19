@@ -18,7 +18,7 @@ space_n_ahead = 2;
 full = 1;
 %     period = 200;
 
-for m=1
+for m=2:mnum
     load(strcat(path,'\',flist(m+2).name),'images','power_data')
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
