@@ -103,6 +103,9 @@ for intv=1:totalIntv
     %     wordlen = row+1;
 %     wordlen = 4*ones([1,length(lin_ind)])+1;
 %     col = 1:length(lin_ind);
+    if intv==68
+        pause;
+    end
     yval(intv,:)=squeeze(newarray(5,:));
     clear H newarray
 end

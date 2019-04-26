@@ -7,8 +7,8 @@ format long;
 % savepath='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19';
 % path='F:\JJ\3-20-19\small sample steady';
 % savepath='F:\JJ\3-20-19\small sample steady result';
-path ='E:\JJ Data\New Data\4-2-19\Data';
-savepath ='E:\JJ Data\New Data\4-2-19\Result';
+path ='J:\JJ Data\New Data\4-2-19\Data';
+savepath ='J:\JJ Data\New Data\4-2-19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -17,6 +17,8 @@ time_n_ahead = 2;
 space_n_ahead = 2;
 full = 1;
 %     period = 200;
+
+% smooth over 10
 
 for m=2:mnum
     load(strcat(path,'\',flist(m+2).name),'images','power_data')
