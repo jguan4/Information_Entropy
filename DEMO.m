@@ -3,13 +3,13 @@ format long;
 
 % path='E:\JJ Data\New Data\3-20-19\Data';
 % savepath='E:\JJ Data\New Data\3-20-19\Result';
-% path='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19\Data';
-% savepath='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19\Result';
+path='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19\Data';
+savepath='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19\Result';
 % path='F:\JJ\3-20-19\small sample steady';
 % savepath='F:\JJ\3-20-19\small sample steady result';
 
-path ='J:\JJ Data\New Data\4-2-19\Data';
-savepath ='J:\JJ Data\New Data\4-2-19\Result';
+% path ='J:\JJ Data\New Data\4-2-19\Data';
+% savepath ='J:\JJ Data\New Data\4-2-19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -19,13 +19,14 @@ space_n_ahead = 2;
 full = 1;
 %     period = 200;
 
-% smooth over 10
+k=20;
 
-for m=2:mnum
+for m=1:2
     load(strcat(path,'\',flist(m+2).name),'images','power_data')
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     tic
+    images = movmean(images,k,1);
 %     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'power_data');
 %     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
 %     clear power_data
@@ -39,11 +40,11 @@ for m=2:mnum
     
     %     [space_inds]=findDefect(videoData, fras, space_n_ahead);
     
-%     space_yval=EntDefect_space(images, full);
-%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test.mat'),'space_yval','-v7.3');
-%     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
-%     clear space_inds space_yval
-%     toc
+    space_yval=EntDefect_space(images, full);
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test.mat'),'space_yval','-v7.3');
+    fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
+    clear space_inds space_yval
+    toc
     
 %     [time_inds]=findDefect(images, fras, time_n_ahead);
 %     toc
@@ -53,7 +54,7 @@ for m=2:mnum
     clear time_yval
     toc
     
-    clear videoData
+    clear images
     SendEmail
     %     com_h = compression_h(videoData,fras,space_n_ahead, space_inds, full);
     %     save(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'),'com_h');
