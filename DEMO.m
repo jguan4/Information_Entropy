@@ -3,12 +3,12 @@ format long;
 
 % path='E:\JJ Data\New Data\3-20-19\Data';
 % savepath='E:\JJ Data\New Data\3-20-19\Result';
-% path='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19';
-% savepath='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19';
+% path='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19\Data';
+% savepath='D:\Documents\GMU\Research\Entropy Project\New Data\4-2-19\Result';
 % path='F:\JJ\3-20-19\small sample steady';
 % savepath='F:\JJ\3-20-19\small sample steady result';
-path ='E:\JJ Data\New Data\4-2-19\Data';
-savepath ='E:\JJ Data\New Data\4-2-19\Result';
+% path ='E:\JJ Data\New Data\4-2-19\Data';
+% savepath ='E:\JJ Data\New Data\4-2-19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -36,11 +36,11 @@ for m=2:mnum
     
     %     [space_inds]=findDefect(videoData, fras, space_n_ahead);
     
-    space_yval=EntDefect_space(images, full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test.mat'),'space_yval','-v7.3');
-    fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
-    clear space_inds space_yval
-    toc
+%     space_yval=EntDefect_space(images, full);
+%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test.mat'),'space_yval','-v7.3');
+%     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
+%     clear space_inds space_yval
+%     toc
     
 %     [time_inds]=findDefect(images, fras, time_n_ahead);
 %     toc
