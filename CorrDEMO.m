@@ -9,8 +9,8 @@ format long;
 % path='F:\JJ\3-20-19\small sample steady';
 % savepath='F:\JJ\3-20-19\small sample steady result';
 
-path ='E:\JJ Data\New Data\4-2-19\Data';
-savepath ='E:\JJ Data\New Data\4-2-19\Result';
+path ='J:\JJ Data\New Data\4-2-19\Data';
+savepath ='J:\JJ Data\New Data\4-2-19\Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -36,8 +36,8 @@ for m=1:mnum
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
-    load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
-    load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'));
+    load(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test_s.mat'));
+    load(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_test_s.mat'));
     %     load(strcat(savepath,'\',trial_stamp,time_stamp, '_com_h_vid_',num2str(space_n_ahead),'_',num2str(full),'.mat'));
     
     % Get data parameters and adjust entropy
@@ -90,16 +90,16 @@ for m=1:mnum
 %     title('Power vs. Time');
 %     drawnow;
     
-%     figure;
-%     subplot(3,1,1)
-%     plot(t_s_lags,t_s_c);
-%     title('Time vs. Space');
-%     subplot(3,1,2)
-%     plot(p_s_lags,p_s_c);
-%     title('Power vs. Space');
-%     subplot(3,1,3)
-%     plot(p_t_lags,p_t_c);
-%     title('Power vs. Time');
+    figure;
+    subplot(3,1,1)
+    plot(t_s_lags,t_s_c);
+    title('Time vs. Space');
+    subplot(3,1,2)
+    plot(p_s_lags,p_s_c);
+    title('Power vs. Space');
+    subplot(3,1,3)
+    plot(p_t_lags,p_t_c);
+    title('Power vs. Time');
     
     
 %     figure(10);
@@ -112,18 +112,18 @@ for m=1:mnum
 %     drawnow;
 end
 
-t_s_c_mean = mean(t_s_corr,1);
-t_s_c_std = std(t_s_corr);
-p_s_c_mean = mean(p_s_corr,1);
-p_s_c_std = std(p_s_corr,1);
-p_t_c_mean = mean(p_t_corr,1);
-p_t_c_std = std(p_t_corr,1);
-figure
-errorbar(-479:479,t_s_c_mean,t_s_c_std);
-title('Time vs. Space')
-figure
-errorbar(-479:479,p_s_c_mean,p_s_c_std);
-title('Power vs. Space')
-figure
-errorbar(-479:479,p_t_c_mean,p_t_c_std);
-title('Power vs. Time')
+% t_s_c_mean = mean(t_s_corr,1);
+% t_s_c_std = std(t_s_corr);
+% p_s_c_mean = mean(p_s_corr,1);
+% p_s_c_std = std(p_s_corr,1);
+% p_t_c_mean = mean(p_t_corr,1);
+% p_t_c_std = std(p_t_corr,1);
+% figure
+% errorbar(-269:269,t_s_c_mean,t_s_c_std);
+% title('Time vs. Space')
+% figure
+% errorbar(-269:269,p_s_c_mean,p_s_c_std);
+% title('Power vs. Space')
+% figure
+% errorbar(-269:269,p_t_c_mean,p_t_c_std);
+% title('Power vs. Time')
