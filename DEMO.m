@@ -21,7 +21,7 @@ full = 1;
 
 k=20;
 
-for m=3:mnum
+for m=1:mnum
     load(strcat(path,'\',flist(m+2).name),'images','power_data')
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
@@ -41,18 +41,18 @@ for m=3:mnum
     %     [space_inds]=findDefect(videoData, fras, space_n_ahead);
     
     space_yval=EntDefect_space(images, full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test_s.mat'),'space_yval','-v7.3');
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test_s_transposed.mat'),'space_yval','-v7.3');
     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
     clear space_inds space_yval
     toc
     
-%     [time_inds]=findDefect(images, fras, time_n_ahead);
+% %     [time_inds]=findDefect(images, fras, time_n_ahead);
+% %     toc
+%     time_yval = EntDefect_time(images,full);
+%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_test_s.mat'),'time_yval','-v7.3');
+%     fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
+%     clear time_yval
 %     toc
-    time_yval = EntDefect_time(images,full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_test_s.mat'),'time_yval','-v7.3');
-    fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
-    clear time_yval
-    toc
     
     clear images
     SendEmail

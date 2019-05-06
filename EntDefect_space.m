@@ -56,7 +56,7 @@ for frame = 1:frameSkip:T
         case 1
             %             newcom=squeeze(sum(inds(prevIntv:nextIntv, :, :),1));
             %             coms=newcom;
-            coms = reshape(squeeze(videoData(frame, :, :)),[1 X*Y]);
+            coms = reshape(squeeze(videoData(frame, :, :))',[1 X*Y]);
         case 0
             %             newcom=squeeze(sum(inds(frame, :, :),1));
             %             videocom = squeeze(videoData(frame, :, :));
