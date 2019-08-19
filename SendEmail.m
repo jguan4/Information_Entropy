@@ -10,7 +10,7 @@ props.setProperty('mail.smtp.socketFactory.class', 'javax.net.ssl.SSLSocketFacto
 props.setProperty('mail.smtp.socketFactory.port', '465');
 
 % sendmail(emailto,subject,message,attachment) 
-sendmail('jiajingguan@gmail.com', 'Mail from MATLAB',strcat(num2str(m), ' out of ',num2str(3),' run is done!'))
+sendmail('jiajingguan@gmail.com', 'Mail from MATLAB',strcat(num2str(m), ' out of ',num2str(10),' run is done!'))
 
 %%%
 % for atteachment  {'sub_folder/signals.m', 'system.mdl'}
