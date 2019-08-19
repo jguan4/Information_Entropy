@@ -8,8 +8,8 @@ format long;
 % path='F:\JJ\3-20-19\small sample steady';
 % savepath='F:\JJ\3-20-19\small sample steady result';
 
-path ='J:\JJ Data\New Data\4-2-19\Data';
-savepath ='J:\JJ Data\New Data\4-2-19\Result';
+path ='E:\JJ Data\5-25-data\0.55';
+savepath ='E:\JJ Data\5-25-data\0.55_Result';
 flist=dir(path);
 mnum=size(flist,1)-2;
 
@@ -19,18 +19,18 @@ space_n_ahead = 2;
 full = 1;
 %     period = 200;
 
-k=20;
+k=10;
 
-for m=1:mnum
+for m=4:10
     load(strcat(path,'\',flist(m+2).name),'images','power_data')
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     tic
     images = movmean(images,k,1);
-%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'power_data');
-%     fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
-%     clear power_data
-%     toc
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'),'power_data');
+    fprintf(strcat('for calculating V, I, P of  ',flist(m+2).name,'\n'))
+    clear power_data
+    toc
     %     videoData = images(:,30:end,:);
     %     videoData = imresize3(videoData, [1080,256,512]);
     %     videoData = images;
@@ -41,18 +41,18 @@ for m=1:mnum
     %     [space_inds]=findDefect(videoData, fras, space_n_ahead);
     
     space_yval=EntDefect_space(images, full);
-    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_test_s_transposed.mat'),'space_yval','-v7.3');
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_space_h_vid_',num2str(space_n_ahead),'_',num2str(full),'_transposed.mat'),'space_yval','-v7.3');
     fprintf(strcat('for calculating space h of  ',flist(m+2).name,'\n'))
     clear space_inds space_yval
     toc
     
 % %     [time_inds]=findDefect(images, fras, time_n_ahead);
 % %     toc
-%     time_yval = EntDefect_time(images,full);
-%     save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'_test_s.mat'),'time_yval','-v7.3');
-%     fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
-%     clear time_yval
-%     toc
+    time_yval = EntDefect_time(images,full);
+    save(strcat(savepath,'\',trial_stamp,time_stamp, '_time_h_',num2str(time_n_ahead),'_',num2str(full),'.mat'),'time_yval','-v7.3');
+    fprintf(strcat('for calculating time h of  ',flist(m+2).name,'\n'))
+    clear time_yval
+    toc
     
     clear images
     SendEmail

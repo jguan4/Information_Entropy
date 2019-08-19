@@ -19,8 +19,9 @@ full = 1;
 a = 1;
 n_average = 8000;
 b = ones([1,n_average])/n_average;
-
-for m=2
+% figure
+% hold on
+for m=1
     trial_stamp =  flist(m+2).name(1:8);
     time_stamp = flist(m+2).name(9:(length(flist(m+2).name)-4));
     load(strcat(savepath,'\',trial_stamp,time_stamp, '_VIP.mat'));
@@ -56,15 +57,32 @@ for m=2
     space_h = space_yval_ave_add(11:end-10);
     time_h = time_h_ave_resize';
     cut_inds = 10/sizeInd_space*size(P_filter,2);
-    p_cut = Pfilter(cut_inds:end-cut_inds);
+    p_cut = P_filter(cut_inds:end-cut_inds);
     p_resize = resample(p_cut, 250, size(p_cut,2));
-    x0 = [1,1]';
+    figure
+    plot(p_resize)
+    figure
+    subplot(2,1,1);
+    plot(time_h)
+    subplot(2,1,2);
+    plot(space_h)
+    search_res = [];
     f = @(x) corr_inv(space_h,time_h,p_resize,x);
-    x=broyden2(f,x0);
+    xs = -5:0.25:0;
+    ys = -15:0.5:15;
+    for r1 = xs
+        for r2 = ys
+            x0 = [r1,r2]';
+            search_res = [search_res;x0', f(x0)];
+            
+        end
+    end
+    plot(search_res(:,3))
+%     x=broyden2(f,x0);
 end
 
 function c = corr_inv(space_h,time_h,p,x)
     hh = [space_h,time_h]*x;
-    [corr, ] = xcov(hh,p,'coeff');
-    corr_sum = 1/sum(abs(corr));
+    [corr, corr_t] = xcov(hh,p,'coeff');
+    c = sum(abs(corr));
 end
