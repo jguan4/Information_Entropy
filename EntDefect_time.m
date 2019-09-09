@@ -36,18 +36,24 @@ ref = 3;    % partition wall/divider reference: 1 = min, 2 = max, 3 = mean,
 word_size_min = 1; % min word length
 word_size_max = 9; % max word length
 
+% dimentions
 T=size(videoData,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-intvNum = 100;
-intvSkip = 4;
-criteria = 10;
 
+% parameters
+intvNum = 100; % number of frames in an interval
+intvSkip = 4;  % number of skip per interval
+criteria = 10; % used to take out not so active pixels, not used currently
+
+% allocation
 totalIntv=floor((T-intvNum)/intvSkip)+1;
 yval=zeros([totalIntv,X*Y]);
 
 for intv=1:totalIntv
     intv = intv
+    
+    % calculate interval index
     prevIntv = (intv-1)*intvSkip+1;
     nextIntv = (intv-1)*intvSkip+intvNum;
     switch full
@@ -72,8 +78,12 @@ for intv=1:totalIntv
     %     E = zeros(lst,1);
     %     L = zeros(lst,1)
     
+    
+    % normalize
     pxn=(ppred-mean(ppred))./(std(ppred));
     clear ppred
+    
+    % partition
     data = partition(pxn,width,ref);
     clear pxn
     
@@ -90,19 +100,23 @@ for intv=1:totalIntv
         % [H(2,ind+1,q),H(3,ind+1,q)] = entropy_miller(n,N); % Miller-Madow estimate + "error"
         H(ind+1,:) = entropy_grassberger(n,N); % Grassberger estimate
     end
+    
     %% calculate entropy rate from block entropies
     %  [h(q,1),E(q,1),L(q,1)] = get_entropy_rate(H(1,:,q));
     %  [h(q,2),E(q,2),L(q,2)] = get_entropy_rate(H(2,:,q));
-    %             [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
+    %  [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
     clear data n
     
+    % calculate h rate
     newarray=diff(H);
+    
+    % was used to calculate stable h rate index, not used currently
     %     diffarray = diff(newarray(2:7,:));
     %     [mindiff,mindiff_I] = min(abs(diffarray));
     %     [row,col] = find(abs(diffarray)== mindiff);
     %     wordlen = row+1;
-%     wordlen = 4*ones([1,length(lin_ind)])+1;
-%     col = 1:length(lin_ind);
+    
+    % save data and increment
     yval(intv,:)=squeeze(newarray(5,:));
     clear H newarray
 end

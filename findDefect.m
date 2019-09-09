@@ -1,15 +1,23 @@
 function [inds]=findDefect(videoData, fras,n_ahead)
+% get dimention
 T=size(videoData,1);
 X=size(videoData,2);
 Y=size(videoData,3);
 inds=zeros(T-fras*n_ahead,X,Y,'int8');
 
 for i=1:T-(fras-1)*n_ahead
+    % take mean and std
     windowstd=squeeze(std(double(videoData(i:n_ahead:(i+n_ahead*(fras-1)),:,:)),0,1));
     windowmean=squeeze(mean(double(videoData(i:n_ahead:(i+n_ahead*(fras-1)),:,:)),1));
+    
+    % demean
     window_scaled=windowstd./windowmean;
+    
+    % take average of demeaned data
     wsmean=mean2(window_scaled);
     wsstd=std2(window_scaled);
+    
+    % if more than two std change, consider it a flickering
     [rowi,coli]=find(window_scaled>(wsmean+wsstd*2));
     lin_ind=sub2ind([X, Y],rowi,coli);
     inds(i,lin_ind) = 1;

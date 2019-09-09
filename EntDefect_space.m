@@ -36,13 +36,17 @@ ref = 3;    % partition wall/divider reference: 1 = min, 2 = max, 3 = mean,
 word_size_min = 1; % min word length
 word_size_max = 9; % max word length
 
+% dimentions
 T=size(videoData,1);
 X=size(videoData,2);
 Y=size(videoData,3);
-int_len = 30;
-intvSkip = 5;
-frameSkip = 5;
 
+% parameters
+int_len = 30; % number of pixels in an interval
+intvSkip = 5; % number of skip per interval
+frameSkip = 5; % skip frame to save time
+
+% allocation
 totalIntv=floor((X*Y-int_len)/intvSkip)+1;
 invRange = 0:int_len-1;
 intv = 1:totalIntv;
@@ -80,9 +84,14 @@ for frame = 1:frameSkip:T
     %         E = zeros(lst,1);
     %         L = zeros(lst,1);
     
+    %reshape to matrix
     pred = double(coms(invInd))';
+    
+    % normalize
     pxn=(pred-mean(pred))./(std(pred));
     clear pred
+    
+    % partition
     data = partition(pxn,width,ref);
     clear pxn
     
@@ -107,11 +116,18 @@ for frame = 1:frameSkip:T
     % [h(q),E(q),L(q)] = get_entropy_rate(H(:,q)');
     %         end
     
+    % calculate h rate
     newarray=diff(H);
+    
+    % was used to calculate stable h rate index, not used currently
     %         diffarray = diff(newarray(1,1:7));
     %         mindiff = min(abs(diffarray));
+    
+    % take 5th indexed rate as h rate
     wordlen = 4*ones([1,totalIntv])+1;
     col = 1:totalIntv;
+    
+    % save data and increment
     yval(fcount,:)=squeeze(newarray(sub2ind(size(newarray),wordlen,col)));
     fcount = fcount+1
     clear newarray H coms
